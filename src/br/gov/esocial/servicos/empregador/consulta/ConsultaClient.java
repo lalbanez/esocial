@@ -11,7 +11,7 @@ public class ConsultaClient {
 	public String consultaEsocial(String xml) throws JAXBException {
 
 		EsocialUtil util = new EsocialUtil();
-		util.getConfiguracao();
+//		util.getConfiguracao();
 
 		ServicoConsultarLoteEventos_Service consultarLoteFactory = new ServicoConsultarLoteEventos_Service();
 

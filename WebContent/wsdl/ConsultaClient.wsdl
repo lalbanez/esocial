@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://consulta.empregador.servicos.esocial.gov.br" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://consulta.empregador.servicos.esocial.gov.br" xmlns:intf="http://consulta.empregador.servicos.esocial.gov.br" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://consulta.empregador.servicos.esocial.gov.br" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="consultaEsocial">
+    <complexType>
+     <sequence>
+      <element name="xml" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="consultaEsocialResponse">
+    <complexType>
+     <sequence>
+      <element name="consultaEsocialReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="consultaEsocialRequest">
+
+      <wsdl:part element="impl:consultaEsocial" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="consultaEsocialResponse">
+
+      <wsdl:part element="impl:consultaEsocialResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ConsultaClient">
+
+      <wsdl:operation name="consultaEsocial">
+
+         <wsdl:input message="impl:consultaEsocialRequest" name="consultaEsocialRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:consultaEsocialResponse" name="consultaEsocialResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ConsultaClientSoapBinding" type="impl:ConsultaClient">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="consultaEsocial">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="consultaEsocialRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="consultaEsocialResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ConsultaClientService">
+
+      <wsdl:port binding="impl:ConsultaClientSoapBinding" name="ConsultaClient">
+
+         <wsdlsoap:address location="http://localhost:8085/EnvioConsultaEsocial/services/ConsultaClient"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

@@ -22,7 +22,7 @@ public class EnvioClientServiceLocator extends org.apache.axis.client.Service im
     }
 
     // Use to get a proxy class for EnvioClient
-    private java.lang.String EnvioClient_address = "http://localhost:8085/EnvioConsultaEsocial/services/EnvioClient";
+    private java.lang.String EnvioClient_address = "http://localhost:7001/envioconsultaesocial/services/EnvioClient";
 
     public java.lang.String getEnvioClientAddress() {
         return EnvioClient_address;

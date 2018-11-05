@@ -22,7 +22,7 @@ public class ConsultaClientServiceLocator extends org.apache.axis.client.Service
     }
 
     // Use to get a proxy class for ConsultaClient
-    private java.lang.String ConsultaClient_address = "http://localhost:7001/envioconsultaesocial/services/ConsultaClient";
+    private java.lang.String ConsultaClient_address = "http://localhost:8085/EnvioConsultaEsocial/services/ConsultaClient";
 
     public java.lang.String getConsultaClientAddress() {
         return ConsultaClient_address;

@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/meuFragment :: headFragment"></head>
+<!--     <meta charset="utf-8"> -->
+
+
+<script th:inline="javascript">
+
+$(document).ready(function(){
+	if([[${resultado}]] == 'OK'){
+        toastr.success("Registro gravado com sucesso.", "Empregador");
+	}else if([[${resultado}]] == 'erroFormulario'){
+		toastr.warning("Não foi possível realizar a gravação, verificar os campos do formulário.", "Empregador");
+	}else if([[${resultado}]] == 'semAlteracao'){
+		toastr.warning("Você não alterou as informações presentes na tela, nenhuma ação será realizada.", "Empregador");
+	}
+	
+    adicionarMascaraData('data_2');
+    adicionarMascaraData('data_3');
+    adicionarMascaraData('data_4');
+    adicionarMascaraData('data_5');
+    
+    $("#infoopVrtetorem").maskMoney({thousands:'.', decimal:',', affixesStay: false}); //solicitarAlvaraBlocoSaldoApurado.js
+});
+
+function gravar(){
+	 $('#myModal2').modal('hide');
+//      habilitaCamposForm(document.forms[0]);
+     $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+    document.getElementById('triatForm').action = _contexto + "/triat/gravar";
+    document.getElementById('triatForm').submit();
+}
+
+//<![CDATA[
+function preGravar(){
+	with (document.forms[0]) {
+    	$('#myModal2').modal();
+	}
+}
+//]]>
+
+//<![CDATA[
+function habilitaCamposForm(formName) {
+	for (i=0; i < formName.elements.length; i++) {
+		if (formName.elements[i].type != 'hidden') {
+			formName.elements[i].disabled = false;
+		}
+	}
+}
+//]]>
+//<![CDATA[
+function irParaTelaEmpregadorDetalhe(){
+    habilitaCamposForm(document.forms[0]);
+    $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+//     document.getElementById('monitoramentoConsultaForm').action = _contexto + "/triat/carregarPagina?" +"periodoAberto=" +param1 + "&tipoPeriodo=" + param2 + "&idEventoSelecionado="+ param3;
+    document.getElementById('triatForm').action = _contexto + "/triat/carregarPaginaDetalhe";
+    document.getElementById('triatForm').submit();
+}
+//]]>
+
+
+//<![CDATA[
+function irParaTelaConsultaMonitoramento(_idOrigem, _idPeriodo, _tipEvento, _idEvento, _agrupacaoStatus){
+    var url = _contexto + "/monitoramentoConsulta?origem=" + _idOrigem + "&periodo="  + _idPeriodo   + "&tipoEvento="  + _tipEvento + "&evento=" + _idEvento + "&agrupacaoStatus=" + _agrupacaoStatus;
+    window.location = url;
+}
+//]]>
+
+
+
+function voltar(){
+	with (document.forms[0]) {
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+//         document.getElementById('triatForm').action = _contexto + "/monitoramento";
+//         document.getElementById('triatForm').submit();
+// 		window.history.back();
+
+        var url = _contexto + "/monitoramento";
+        window.location = url;
+	}
+}
+
+</script>
+<body class="fixed-sidebar">
+
+
+
+          
+          
+          
+
+
+	<div id="wrapper">
+
+    <!-- Menu Lateral  -->
+    <nav th:replace="fragments/meuFragment :: menuLateralFragment"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+      
+        <!-- Cabeçalho --> 
+        <div th:replace="fragments/meuFragment :: menuSuperiorFragment"></div>
+
+        <!-- Conteúdo --> 
+        
+              <div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+                   <div class="modal-dialog">
+                       <div class="modal-content animated flipInY">
+                           <div class="modal-header">
+                               <h4 class="modal-title">Empregador</h4>
+                               <small class="font-bold">Empregador</small>
+                           </div>
+                           <div class="modal-body">
+                               <p>Você tem certeza que realizou a alteração de todos os campos necessários e confirma a geração do arquivo XML?</p>
+                           </div>
+                           <div class="modal-footer">
+                               <button type="button" class="btn btn-white" data-dismiss="modal">Fechar</button>
+                               <button type="button" class="btn btn-primary" onclick="gravar()">Gravar</button>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+        
+        
+        <br/>
+        
+              <div class="text-center">
+	        <div id="ibox1" class="ibox">
+	            <h3 class="text-navy"><b>Dados de Evento  S-1000 - Informações do Empregador/Contribuinte/Órgão Público</b> </h3>
+	        </div>
+        </div>
+        
+        <h3 class="text-navy">Parâmetros de Cadastro </h3>
+                     <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"><b>Período Aberto:</b></label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4"><span th:text="${dadosUltimoEventoGerado.periodoDetVO.periodoVO.periodo}"></span></div>
+                            
+                            
+                            <label class="col-sm-2 col-form-label"><b>Tipo de Período:</b></label>
+<!--                             <div class="col-md-4"><span th:text="${dadosUltimoEventoGerado.periodoDetVO.periodoVO.tipoPeriodo}"></span></div> -->
+                            <div class="col-md-4">Normal</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="text-navy">Dados do Último Evento Gerado </h3>
+                <div class="col-lg-12">
+                <div class="ibox ">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                       <th>ID do Evento</th>
+                                       <th>Data da Geração</th>
+                                       <th>Tipo Ação</th>
+                                       <th>Início Vigência</th>
+                                       <th>Fim Vigência</th>
+                                       <th>Status do Evento</th>
+                                       <th>Detalhar</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody th:if="${dadosUltimoEventoGerado != null}">
+                                      <tr>
+                                           <td><span th:text="${dadosUltimoEventoGerado.id}"></span></td>
+                                            <td><span th:text="${#dates.format(dadosUltimoEventoGerado.datIng, 'dd/MM/yyyy')}"></span></td>
+                                             <td><span th:text="${dadosUltimoEventoGerado.parCodigoCtrFlgAcao.desDescricao}"></span></td>
+		                                 <td><span  th:text="${dadosUltimoEventoGerado.ideperiodoInivalid}"></span></td>
+		                                  <td><span  th:text="${dadosUltimoEventoGerado.ideperiodoFimvalid}"></span></td>
+		                                <td><span th:text="${dadosUltimoEventoGerado.parCodigoCtrFlgStatus.desDescricao}"></span></td>
+		                                 <td>
+				                                 
+				                                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+		                                             Detalhar
+		                                         </button>
+		                                 </td>
+			                           </tr>
+                                  </tbody>
+                             </table>
+                        </div>
+                </div>
+            </div>
+            
+            
+            
+            
+        <div class="row">
+        <div class="col-lg-12">
+        <div id="ibox1" class="ibox ">
+        <div class="ibox-content">
+            
+           <!-- Utilizado para spinner de Loading -->
+           <div class="sk-spinner sk-spinner-double-bounce">
+                <div class="sk-double-bounce1"></div>
+                <div class="sk-double-bounce2"></div>
+           </div>
+           
+           
+           
+           
+           
+           
+          <form id="triatForm"  th:object="${triatForm}" method="post"> 
+          
+          
+          <input type="hidden" th:field="*{codIns}" />
+          <input type="hidden" th:field="*{idEmpregador}" />
+          
+          
+            <h4 class="text-navy">Identificação do Evento </h4>
+            
+                            
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"><span class="text-danger">* </span><b>Identificação do Ambiente:</b></label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <select id="periodo" class="form-control m-b" th:field="*{tpamb}">
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaIdentificacaoAmbiente}" th:value="${codigo.codPar}" th:text="${codigo.desDescricao}"></option>
+                                </select>
+                                 <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('tpamb')}" th:errors="*{tpamb}" class="validation-message"></label>
+                                  </span>
+                            </div>
+                            
+                            <label class="col-sm-2 col-form-label"><span class="text-danger">* </span><b>Versão do Processo de Emissão do Evento:</b></label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" maxlength="20"  th:field="*{verproc}"/>
+                                 <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('verproc')}" th:errors="*{verproc}" class="validation-message"></label>
+                                  </span>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                 <div class="form-group row">
+                   <label class="col-sm-2 col-form-label"><span class="text-danger">* </span><b>Processo de Emissão do Evento:</b></label>
+                   <div class="col-sm-10">
+                       <div class="col-lg-4 m-l-n">
+                            <select id="origem"  class="form-control m-b"  th:field="*{procemi}">
+                                 <option value="">Selecione</option>
+                                 <option th:each="codigo : ${listaProcessoEmissaoEvento}" th:value="${codigo.codPar}" th:text="${codigo.desDescricao}"></option>
+                            </select>
+                                  <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('procemi')}" th:errors="*{procemi}" class="validation-message"></label>
+                                  </span>                               
+                        </div>
+                    </div>
+                </div>
+ 
+       <h4 class="text-navy"> Identificação da Operação das Informações </h4>
+               <div class="form-group row">
+                   <label class="col-sm-2 col-form-label"><span class="text-danger">* </span><b>Tipo de Ação:</b></label>
+                   <div class="col-sm-10">
+                       <div class="col-lg-4 m-l-n">
+                            <select id="ctrFlgAcao"  class="form-control m-b" th:field="*{ctrFlgAcao}">
+                                 <option value="">Selecione</option>
+                                 <option th:each="codigo : ${listaTipoAcao}" th:value="${codigo.codPar}" th:text="${codigo.desDescricao}"></option>
+                            </select>
+                           <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('ctrFlgAcao')}" th:errors="*{ctrFlgAcao}" class="validation-message"></label>
+                          </span>
+                        </div>
+                    </div>
+                </div> 
+                
+                
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"><span class="text-danger">* </span><b>Início Vigência:</b></label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                 <input type="text" class="form-control" data-mask="9999-99" th:field="*{ideperiodoInivalid}"/>
+                                  <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('ideperiodoInivalid')}" th:errors="*{ideperiodoInivalid}" class="validation-message"></label>
+                                  </span>
+                            </div>
+                            
+                             
+                            
+                            <label class="col-sm-2 col-form-label"><b>Fim Vigência:</b></label>
+                            <div class="col-md-4">
+	                             <input type="text" class="form-control" data-mask="9999-99" th:field="*{ideperiodoFimvalid}"/>
+	                             <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('ideperiodoFimvalid')}" th:errors="*{ideperiodoFimvalid}" class="validation-message"></label>
+                                  </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+                
+                <br/>
+                
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs" role="tablist">
+                        
+                             
+                            <li th:if="${#fields.hasErrors('tpinsc')
+                                         or #fields.hasErrors('nrinsc')
+                                         or #fields.hasErrors('infocadastroNmrazao')
+                                         or #fields.hasErrors('infocadastroClasstrib')
+                                         or #fields.hasErrors('infocadastroInddesfolha')
+                                         or #fields.hasErrors('infocadastroInddesfolha')
+                                         or #fields.hasErrors('infocadastroIndoptregeletron')
+                                         or #fields.hasErrors('infocadastroIndett')
+                                         or #fields.hasErrors('dadosisencaoDtemiscertif')
+                                         or #fields.hasErrors('dadosisencaoDtvenccertif')
+                                         or #fields.hasErrors('dadosisencaoDtprotrenov')
+                                         or #fields.hasErrors('dadosisencaoDtdou')
+                                         }">
+		                                <a class="nav-link active" data-toggle="tab" href="#tab-1">
+		                                    <span class="text-danger"><i class="fa fa-times-circle"></i>Empregador</span>
+		                                </a>
+                             </li>
+                            <li th:unless="${#fields.hasErrors('tpinsc')
+                                         or #fields.hasErrors('nrinsc')
+                                         or #fields.hasErrors('infocadastroNmrazao')
+                                         or #fields.hasErrors('infocadastroClasstrib')
+                                         or #fields.hasErrors('infocadastroInddesfolha')
+                                         or #fields.hasErrors('infocadastroInddesfolha')
+                                         or #fields.hasErrors('infocadastroIndoptregeletron')
+                                         or #fields.hasErrors('infocadastroIndett')
+                                         or #fields.hasErrors('dadosisencaoDtemiscertif')
+                                         or #fields.hasErrors('dadosisencaoDtvenccertif')
+                                         or #fields.hasErrors('dadosisencaoDtprotrenov')
+                                         or #fields.hasErrors('dadosisencaoDtdou')
+                                         }">
+                                         <a class="nav-link active" data-toggle="tab" href="#tab-1">Empregador</a>
+                             </li>
+                             
+                             
+                               <li th:if="${#fields.hasErrors('contatoCpfctt')
+                                         or #fields.hasErrors('contatoEmail')
+                                         }">
+                                        <a class="nav-link" data-toggle="tab" href="#tab-2">
+                                          <span class="text-danger"><i class="fa fa-times-circle"></i>Contato</span></a>
+                               </li>
+                               <li th:unless="${#fields.hasErrors('contatoCpfctt')
+                                         or #fields.hasErrors('contatoEmail')
+                                         }">
+                                        <a class="nav-link" data-toggle="tab" href="#tab-2">Contato</a>
+                               </li>                               
+ 
+ 
+                                <li th:if="${#fields.hasErrors('infoopCnpjefr')
+                                         }">
+                                        <a class="nav-link" data-toggle="tab" href="#tab-3">
+                                          <span class="text-danger"><i class="fa fa-times-circle"></i>Órgão Público</span></a>
+                               </li>                              
+                                <li th:unless="${#fields.hasErrors('infoopCnpjefr')
+                                         }">
+                                        <a class="nav-link" data-toggle="tab" href="#tab-3">Órgão Público</a>
+                               </li>                                
+                               
+                               
+                              <li th:if="${#fields.hasErrors('softwarehouseEmail')
+                                         or #fields.hasErrors('softwarehouseCnpjsofthouse')
+                                         }">
+                                  <a class="nav-link" data-toggle="tab" href="#tab-4">
+                                  <span class="text-danger"><i class="fa fa-times-circle"></i>Software</span></a>
+                              </li>
+                              <li th:unless="${#fields.hasErrors('softwarehouseEmail')
+                                         or #fields.hasErrors('softwarehouseCnpjsofthouse')
+                                         }">
+                                  <a class="nav-link" data-toggle="tab" href="#tab-4">Software</a>
+                              </li>                              
+                              
+                              
+                               <li><a class="nav-link" data-toggle="tab" href="#tab-5">Outras Informações</a></li>
+                               
+                        </ul>
+                        <div class="tab-content">
+                        
+                        
+    <div role="tabpanel" id="tab-1" class="tab-pane active">
+        <div class="panel-body ">
+                                
+            <h4 class="text-navy"><i class="fa fa-file-text"></i> Informações do Empregador</h4>   
+                                
+            <div class="form-group row">
+			    <label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Tipo de Inscrição:</label>
+			    <div class="col-sm-10">
+			        <div class="col-lg-4 m-l-n">
+			            <select id="empregador"  class="form-control m-b"  th:field="*{tpinsc}">
+                            <option value="">Selecione</option>
+                            <option th:each="codigo : ${listaTipoInscricao}" th:value="${codigo.codPar}" th:text="${codigo.desDescricao}"></option>
+                        </select>
+                        <span class="text-danger"> 
+                             <label th:if="${#fields.hasErrors('tpinsc')}" th:errors="*{tpinsc}" class="validation-message"></label>
+                        </span>
+			        </div>
+			    </div>
+			</div>
+   
+            <div class="form-group row">
+			<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Número Inscrição:</label>
+			    <div class="col-sm-10">
+			        <div class="col-lg-4 m-l-n">
+			            <input type="text" class="form-control" maxlength="15" th:field="*{nrinsc}"/>
+			            <span class="text-danger"> 
+                             <label th:if="${#fields.hasErrors('nrinsc')}" th:errors="*{nrinsc}" class="validation-message"></label>
+                        </span>
+			        </div>
+			    </div>
+			</div>                             
+                                
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Nome Razão Social:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-12 m-l-n">
+                        <input type="text" class="form-control" th:field="*{infocadastroNmrazao}" maxlength="100"/>
+                        <span class="text-danger"> 
+                             <label th:if="${#fields.hasErrors('infocadastroNmrazao')}" th:errors="*{infocadastroNmrazao}" class="validation-message"></label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+                                
+  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Classificação Tributária:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-12 m-l-n">
+                        <select id="empregador"  class="form-control m-b"  th:field="*{infocadastroClasstrib}">
+                            <option value="">Selecione</option>
+                            <option th:each="codigo : ${listaClassificaoTributaria}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                        </select>
+                        <span class="text-danger"> 
+                             <label th:if="${#fields.hasErrors('infocadastroClasstrib')}" th:errors="*{infocadastroClasstrib}" class="validation-message"></label>
+                        </span>
+                    </div>
+               </div>
+            </div>
+  
+  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Natureza Jurídica:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-12 m-l-n">
+                        <select id="empregador"  class="form-control m-b" th:field="*{infocadastroNatjurid}">
+                            <option value="">Selecione</option>
+                             <option th:each="codigo : ${listaNaturezaJuridica}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Cooperativa:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select id="periodo" class="form-control m-b" th:field="*{infocadastroIndcoop}">
+                                <option value="">Selecione</option>
+                                 <option th:each="codigo : ${listaCooperativa}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                            </select>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Construtora:</label>
+                        <div class="col-md-4">
+	                        <select id="tipoEvento" class="form-control m-b" th:field="*{infocadastroIndconstr}">
+	                            <option value="">Selecione</option>
+	                            <option th:each="codigo : ${listaConstrutora}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+	                        </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Desoneração da Folha:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select id="periodo" class="form-control m-b" th:field="*{infocadastroInddesfolha}">
+                                <option value="">Selecione</option>
+                                <option th:each="codigo : ${listaDesoneracaoFolha}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                            </select>
+                            <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('infocadastroInddesfolha')}" th:errors="*{infocadastroInddesfolha}" class="validation-message"></label>
+                            </span>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Ponto Eletrônico:</label>
+                        <div class="col-md-4">
+	                        <select id="tipoEvento" class="form-control m-b" th:field="*{infocadastroIndoptregeletron}">
+	                            <option value="">Selecione</option>
+	                            <option th:each="codigo : ${listaPontoEletronico}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+	                        </select>
+	                        <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('infocadastroIndoptregeletron')}" th:errors="*{infocadastroIndoptregeletron}" class="validation-message"></label>
+                            </span>
+                        </div>
+                   </div>
+                </div>
+            </div> 
+                
+           <div class="form-group row">
+               <label class="col-sm-2 col-form-label">Entidade Sem Fins Lucrativos:</label>
+               <div class="col-sm-10">
+                   <div class="row">
+                       <div class="col-md-4">
+                           <select id="periodo" class="form-control m-b" th:field="*{infocadastroIndented}">
+                               <option value="">Selecione</option>
+                               <option th:each="codigo : ${listaEntidadeSemFinsLucrativos}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                           </select>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Empresa de Trabalho Temporário:</label>
+                        <div class="col-md-4">
+	                        <select id="tipoEvento" class="form-control m-b" th:field="*{infocadastroIndett}">
+	                            <option value="">Selecione</option>
+	                            <option th:each="codigo : ${listaEmpresaTrabalhoTemporario}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+	                        </select>
+	                        
+	                        <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('infocadastroIndett')}" th:errors="*{infocadastroIndett}" class="validation-message"></label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>     
+                
+            <div class="form-group row">
+			    <label class="col-sm-2 col-form-label">Número do Registro da Empresa de Trabalho Temporário no Ministério do Trabalho:</label>
+			    <div class="col-sm-10">
+			        <div class="col-lg-4 m-l-n">
+			            <input type="text" class="form-control" th:field="*{infocadastroNrregett}" maxlength="30" onkeypress="return apenasNumeros(event)"/>
+			        </div>
+			    </div>
+		    </div>   
+		    
+		    <h4 class="text-navy">Informações Complementares - Empresas Isentas - Dados da Isenção</h4>
+		    
+		    <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Sigla e Nome do Ministério ou Lei que concedeu o Certificado:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-12 m-l-n">
+                        <input type="text" class="form-control" maxlength="70" th:field="*{dadosisencaoIdeminlei}"/>
+                    </div>
+                </div>
+            </div>
+		    
+           <div class="form-group row">
+               <label class="col-sm-2 col-form-label">Nº Certificado:</label>
+               <div class="col-sm-10">
+                   <div class="row">
+                       <div class="col-md-4">
+                           <input type="text" class="form-control" maxlength="40" th:field="*{dadosisencaoNrcertif}"/>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Data de Emissão do Certificado:</label>
+                        <div class="col-md-4">
+                        
+                               <div class="input-group date" id="data_2">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+	                            <input type="text" class="form-control"  data-mask="99/99/9999" th:field="*{dadosisencaoDtemiscertif}"/>
+	                          </div>
+	                         <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('dadosisencaoDtemiscertif')}" th:errors="*{dadosisencaoDtemiscertif}" class="validation-message"></label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>		      
+            
+       
+                            
+
+           <div class="form-group row">
+               <label class="col-sm-2 col-form-label">Data de Vencimento do Certificado:</label>
+               <div class="col-sm-10">
+                   <div class="row">
+                       <div class="col-md-4">
+                           
+                               <div class="input-group date" id="data_3">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+	                            <input type="text" class="form-control"  data-mask="99/99/9999" th:field="*{dadosisencaoDtvenccertif}"/>
+	                          </div>
+                           <span class="text-danger"> 
+                              <label th:if="${#fields.hasErrors('dadosisencaoDtvenccertif')}" th:errors="*{dadosisencaoDtvenccertif}" class="validation-message"></label>
+                           </span>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Protocolo Pedido Renovação:</label>
+                        <div class="col-md-4">
+	                        <input type="text" class="form-control" th:field="*{dadosisencaoNrprotrenov}" maxlength="40"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+           <div class="form-group row">
+               <label class="col-sm-2 col-form-label">Data do Protocolo de Renovação:</label>
+               <div class="col-sm-10">
+                   <div class="row">
+                       <div class="col-md-4">
+                           
+                              <div class="input-group date" id="data_4">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+	                            <input type="text" class="form-control"  data-mask="99/99/9999" th:field="*{dadosisencaoDtprotrenov}"/>
+	                          </div>
+	                                                     
+                           <span class="text-danger"> 
+                              <label th:if="${#fields.hasErrors('dadosisencaoDtprotrenov')}" th:errors="*{dadosisencaoDtprotrenov}" class="validation-message"></label>
+                           </span>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Data Publicação Diário Oficial da União:</label>
+                        <div class="col-md-4">
+	                        
+                              <div class="input-group date" id="data_5">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+	                            <input type="text" class="form-control"  data-mask="99/99/9999" th:field="*{dadosisencaoDtdou}"/>
+	                          </div>
+	                          	                        
+	                        <span class="text-danger"> 
+                              <label th:if="${#fields.hasErrors('dadosisencaoDtdou')}" th:errors="*{dadosisencaoDtdou}" class="validation-message"></label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+
+           <div class="form-group row">
+               <label class="col-sm-2 col-form-label">Nº da Página no DOU Referente à Publicação:</label>
+               <div class="col-sm-10">
+                   <div class="row">
+                       <div class="col-md-4">
+                           <input type="text" class="form-control" maxlength="5" th:field="*{dadosisencaoPagdou}" onkeypress="return apenasNumeros(event)"/>
+                        </div>
+                    </div>
+                </div>
+            </div>                                                        
+
+    </div>
+ </div>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+
+     
+     
+     
+    
+     
+     
+    <!-- Início - Bloco Contato -->                        
+    <div role="tabpanel" id="tab-2" class="tab-pane">
+        <div class="panel-body">
+                               
+            <h4 class="text-navy"><i class="fa fa-file-text"></i> Informações de Contato</h4>         
+                                  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Nome do Contato da Empresa:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-12 m-l-n"> 
+                        <input type="text" class="form-control"  th:field="*{contatoNmctt}"  maxlength="70" />
+                    </div>
+                </div>
+            </div>
+  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">CPF do Contato:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" th:field="*{contatoCpfctt}" maxlength="11" data-mask="999.999.999-99"/>
+                            <span class="text-danger"> 
+                                 <label th:if="${#fields.hasErrors('contatoCpfctt')}" th:errors="*{contatoCpfctt}" class="validation-message"></label>
+                            </span>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">E-mail do Contato:</label>
+                        <div class="col-md-4">
+                             <input type="text" class="form-control" th:field="*{contatoEmail}" maxlength="60"/>
+                            <span class="text-danger"> 
+                                 <label th:if="${#fields.hasErrors('contatoEmail')}" th:errors="*{contatoEmail}" class="validation-message"></label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Telefone Celular:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                             <input type="text" class="form-control" th:field="*{contatoFonecel}" maxlength="13" data-mask="(099)99999-9999"/>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Telefone Fixo:</label>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control"  th:field="*{contatoFonefixo}" maxlength="13" data-mask="(099)9999-9999"/>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+              
+         </div>
+     </div>
+     <!-- Fim - Bloco Contato  -->
+     
+   
+    <!-- Início - Bloco Órgão Público -->                        
+    <div role="tabpanel" id="tab-3" class="tab-pane">
+        <div class="panel-body">
+                               
+            <h4 class="text-navy"><i class="fa fa-file-text"></i> Informações Relativas a Órgão Público</h4>         
+                                  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Unidade Gestora do Regime Próprio de Previdência Social:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                              <select id="periodo" class="form-control m-b" th:field="*{infoopIndugrpps}">
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaUnidadeGestoraRPPS}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Esfera Administrativa:</label>
+                        <div class="col-md-4">
+                                <select id="periodo" class="form-control m-b" th:field="*{infoopEsferaop}">
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaEsferaAdministrativa}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Poder/Instituição:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                               <select id="periodo" class="form-control m-b" th:field="*{infoopPoderop}">
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaPoderInstituicao}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Valor Teto Remuneratório Específico:</label>
+                        <div class="col-md-4">
+                        
+                              <div class="input-group-prepend">
+	                              <span class="input-group-addon">R$</span>
+	                             <input type="text" class="form-control" th:field="*{infoopVrtetorem}" maxlength="21"/>
+                             </div>
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Ente Federativo Responsável:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                              <select id="periodo" class="form-control m-b" th:field="*{infoopIdeefr}">
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaEnteFederativoResponsavel}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">CNPJ do Ente Federativo Responsável:</label>
+                        <div class="col-md-4">
+                             <input type="text" class="form-control" th:field="*{infoopCnpjefr}" data-mask="99.999.999/9999-99"/>
+                             <span class="text-danger"> 
+                                 <label th:if="${#fields.hasErrors('infoopCnpjefr')}" th:errors="*{infoopCnpjefr}" class="validation-message"></label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h4 class="text-navy">Informações Relativas a Ente Federativo Responsável - ERF</h4>             
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Possui Regime Próprio de Previdência Social - RPPS:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                              <select id="periodo" class="form-control m-b" th:field="*{infoefrIdeefr}">
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaPossuiRegimeProprioRPPS}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Instituiu Regime de Previdência Complementar:</label>
+                        <div class="col-md-4">
+                             <select id="periodo" class="form-control m-b" th:field="*{infoefrCnpjefr}">
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaInstituiuRegimePrevidenciaComplementar}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                                                
+         </div>
+     </div>
+     <!-- Fim - Bloco Órgão Público  -->   
+   
+   
+    <!-- Início - Bloco Software -->                        
+    <div role="tabpanel" id="tab-4" class="tab-pane">
+        <div class="panel-body">
+                               
+            <h4 class="text-navy"><i class="fa fa-file-text"></i> Informações Relativas ao Desenvolvedor do Software</h4>         
+                                  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Razão Social:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-12 m-l-n">
+                        <input type="text" class="form-control" th:field="*{softwarehouseNmrazao}" maxlength="100"/>
+                    </div>
+                </div>
+            </div>
+  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">CNPJ da Empresa:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" th:field="*{softwarehouseCnpjsofthouse}" maxlength="70" data-mask="99.999.999/9999-99"/>
+                         <span class="text-danger"> 
+                              <label th:if="${#fields.hasErrors('*{softwarehouseCnpjsofthouse}')}" th:errors="*{softwarehouseCnpjsofthouse}" class="validation-message"></label>
+                        </span>                            
+                            
+                        </div>
+                            
+                        <label class="col-sm-2 col-form-label">Telefone:</label>
+                        <div class="col-md-4">
+                             <input type="text" class="form-control" th:field="*{softwarehouseTelefone}" maxlength="13" data-mask="(099)9999-9999"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Nome Contato:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-12 m-l-n">
+                        <input type="text" class="form-control" th:field="*{softwarehouseNmcont}"  maxlength="70"/>
+                    </div>
+                </div>
+            </div> 
+            
+           <div class="form-group row">
+                <label class="col-sm-2 col-form-label">E-mail:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-12 m-l-n">
+                        <input type="text" class="form-control" th:field="*{softwarehouseEmail}" maxlength="60"/>
+                         <span class="text-danger"> 
+                              <label th:if="${#fields.hasErrors('*{softwarehouseEmail}')}" th:errors="*{softwarehouseEmail}" class="validation-message"></label>
+                        </span>
+                    </div>
+                </div>
+            </div>   
+              
+         </div>
+     </div>
+     <!-- Fim - Bloco Software -->   
+   
+   
+    <!-- Início - Bloco Outras Informações -->                        
+    <div role="tabpanel" id="tab-5" class="tab-pane">
+        <div class="panel-body">
+                               
+            <h4 class="text-navy"><i class="fa fa-file-text"></i> Informações Exclusivas de Acordo Internacional</h4>         
+                                  
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Possui Acordo Internacional:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-4 m-l-n">
+                    
+                           <select id="periodo" class="form-control m-b" th:field="*{infoorginterIndacordoinsenmul}">
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaPossuiAcordoInternacional}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                     </div>
+                 </div>
+            </div>
+            
+            
+            <h4 class="text-navy"><i class="fa fa-file-text"></i> Informações Complementares Sobre o Declarante</h4>    
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Situação da Pessoa Jurídica:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-4 m-l-n">
+                           <select id="periodo" class="form-control m-b"  th:field="*{situacaopjIndsitpj}" >
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaSituacaoPessoaJuridica}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                     </div>
+                 </div>
+            </div>
+            
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Situação da Pessoa Física:</label>
+                <div class="col-sm-10">
+                    <div class="col-lg-4 m-l-n">
+                           <select id="periodo" class="form-control m-b" th:field="*{situacaopfIndsitpf}" >
+                                    <option value="">Selecione</option>
+                                    <option th:each="codigo : ${listaSituacaoPessoaFisica}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+                                </select>
+                     </div>
+                 </div>
+            </div>             
+              
+         </div>
+     </div>
+     <!-- Fim - Bloco Outras Informações -->    
+   
+   
+   
+   
+   
+   
+   
+   
+
+     
+     
+     
+     
+     
+      </div>
+    </div>
+                
+                
+      <br/>
+      <div class="form-group row">
+          <div class="col-sm-12">
+              <div class="text-center">
+                  <button id="botaoConsultar" class="btn btn-primary dim btn-primary-dim" type="button" onclick="preGravar();">Gravar</button>
+                  <button id="botaoConsultar" class="btn btn-primary dim btn-primary-dim" type="button" onclick="voltar();">Voltar</button>
+                  
+                  
+                  
+                  
+                            <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content animated bounceInRight">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Empregador</h4>
+                                            <small class="font-bold text-navy"> Detalhe Dados do Último Evento Gerado</small>
+                                           
+                                        </div>
+                                        
+                                        
+<!--                                                                               <td><span th:text="${dadosUltimoEventoGerado.id}"></span></td> -->
+<!--                                             <td><span th:text="${#dates.format(dadosUltimoEventoGerado.datIng, 'dd/MM/yyyy')}"></span></td> -->
+<!--                                              <td><span th:text="${dadosUltimoEventoGerado.parCodigoCtrFlgAcao.desDescricao}"></span></td> -->
+<!-- 		                                 <td><span  th:text="${dadosUltimoEventoGerado.ideperiodoInivalid}"></span></td> -->
+<!-- 		                                  <td><span  th:text="${dadosUltimoEventoGerado.ideperiodoFimvalid}"></span></td> -->
+<!-- 		                                <td><span th:text="${dadosUltimoEventoGerado.parCodigoCtrFlgStatus.desDescricao}"></span></td> -->
+
+                                        <div class="modal-body">
+                                          	 <div class="row">          
+	                                               <div class="col-sm-12 text-left">
+									                   <b>ID do Evento:</b> <span th:text="${dadosUltimoEventoGerado.id}"></span>
+									                </div> 
+									                
+									                <div class="col-sm-6 text-left">
+									                   <b>Status de Evento:</b> <span th:text="${dadosUltimoEventoGerado.parCodigoCtrFlgStatus.desDescricao}"></span>
+									                </div> 
+	                                               <div class="col-sm-6 text-left">
+									                   <b>Data de Geração:</b> <span th:if="${dadosUltimoEventoGerado.datIng != null}" th:text="${#dates.format(dadosUltimoEventoGerado.datIng, 'dd/MM/yyyy')}"></span>
+									                </div> 
+									                
+	                                               <div class="col-sm-6 text-left">
+									                   <b>Nº do Lote:</b> <span th:if="${dadosUltimoEventoGerado.ctrLoteVO!= null}"  th:text="${dadosUltimoEventoGerado.ctrLoteVO.idLote}"></span>
+									                </div> 
+	                                               <div class="col-sm-6 text-left">
+									                   <b>Data de Envio:</b>  <span th:if="${dadosUltimoEventoGerado.ctrLoteVO != null}" th:text="${#dates.format(dadosUltimoEventoGerado.ctrLoteVO.ctrDatEnvio, 'dd/MM/yyyy')}"></span>
+									                </div>   
+								             
+	                                               <div class="col-sm-12 text-left">
+									                   <b>Nº Protocolo de Envio:</b> <span th:if="${dadosUltimoEventoGerado.ctrLoteVO != null}" th:text="${dadosUltimoEventoGerado.ctrLoteVO.wsProtocoloEnvio}"></span>
+									                </div> 
+	
+	                                               <div class="col-sm-6 text-left">
+									                   <b>Nº Recibo:</b> <span th:if="${dadosUltimoEventoGerado.ctrLoteVO != null}" th:text="${dadosUltimoEventoGerado.ctrLoteVO.wsProtocoloRetorno}"></span>
+									                </div> 
+	                                               <div class="col-sm-6 text-left">
+									                   <b>Data de Retorno:</b> <span th:if="${dadosUltimoEventoGerado.ctrLoteVO != null}" th:text="${#dates.format(dadosUltimoEventoGerado.ctrLoteVO.ctrDatRetorno, 'dd/MM/yyyy')}"></span>
+									                </div>   
+								             
+	                                               <div class="col-sm-12 text-left">
+									                   <b>Tipo de Ação:</b> <span th:text="${dadosUltimoEventoGerado.parCodigoCtrFlgAcao.desDescricao}"></span>
+									                </div> 
+								             
+	                                               <div class="col-sm-6 text-left">
+									                   <b>Início Vigência:</b> <span  th:text="${dadosUltimoEventoGerado.ideperiodoInivalid}"></span>
+									                </div> 
+	                                               <div class="col-sm-6 text-left">
+									                   <b>Fim Vigência:</b> <span  th:text="${dadosUltimoEventoGerado.ideperiodoFimvalid}"></span>
+									                </div>   
+								        </div>                 
+								        </div>                          
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-white" data-dismiss="modal">Fechar</button>                                         
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+              </div>
+          </div>
+      </div>                
+                
+                
+                                 
+           </form>
+           
+           
+           
+           </div></div></div></div></div></div>
+
+
+</body>
+</html>

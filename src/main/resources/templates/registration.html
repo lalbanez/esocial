@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>eSocial | Cadastrar Usuário</title>
+    
+    <link   th:href="@{/inspinia/css/bootstrap.min.css}" rel="stylesheet"></link>
+    <link th:href="@{/inspinia/css/font-awesome.css}" rel="stylesheet"></link>
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet"></link>
+    <link th:href="@{/inspinia/css/animate.css}" rel="stylesheet"></link>
+    <link th:href="@{/inspinia/css/style.css}" rel="stylesheet"></link>
+    <script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/inspinia/js/popper.min.js}"></script>
+    <script th:src="@{/inspinia/js/bootstrap.js}"></script>
+    <link rel="shortcut icon" th:href="@{/imagens/logo_esocial.ico}" type="image/x-icon" />
+</head>
+
+<body class="gray-bg">
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+               <img th:src="@{/imagens/logo_esocial.png}"  width="300" height="200" alt="Logo"/>
+            </div>
+            
+            <h3>SPPREV</h3>
+            <p>Criação de um novo usuário.</p>           
+               
+            <h2><span class="text-success" th:text="${successMessage}"></span></h2>
+                 
+            <form autocomplete="off" action="#" th:action="@{/registration}" th:object="${user}" method="post" class="m-t" role="form">
+            
+                <div class="form-group">
+                    <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></label>
+                    <input type="text" class="form-control" placeholder="Nome" th:field="*{name}" maxlength="20"/>
+                </div>
+                
+                <div class="form-group">
+                     <label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></label>
+                     <input type="text" class="form-control" placeholder="Sobrenome"  th:field="*{lastName}" maxlength="20" />
+                </div>   
+                
+                <div class="form-group">
+                    <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></label>
+                    <input type="text" class="form-control" placeholder="E-mail" th:field="*{email}" maxlength="50"/>
+                </div>
+                <div class="form-group">
+                    <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></label>
+                    <input type="password" class="form-control" placeholder="Senha"  th:field="*{password}" maxlength="20"/>
+                </div>
+               
+                <button type="submit" class="btn btn-primary block full-width m-b">Cadastrar</button>
+
+                <p class="text-muted text-center"><small>Já possui um usuário?</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="login.html">Tela de Login</a>
+                
+            </form>
+            
+            <p class="m-t"> <small>Atlantic Solutions &copy; 2018</small></p>
+        </div>
+    </div>
+</body>
+
+</html>

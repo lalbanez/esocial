@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/meuFragment :: headFragment"></head>
+<!--     <meta charset="utf-8"> -->
+
+<script th:inline="javascript">
+    $(function(){
+    	
+        $('#botaoConsultar').on('click', function(){
+            $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        });
+        
+        $("a[href*='irParaTelaConsultaMonitoramento']").on('click', function(){
+            $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        });
+      
+      	if([[${pesquisaRealizada}]] == 'registroEncontrado'){
+            toastr.success("Pesquisa realizada com sucesso.", "Monitoramento");
+      	}else if([[${pesquisaRealizada}]] == 'registroNaoEncontrado'){
+      		toastr.warning("Não foram encontrados eventos para os filtros selecionados.", "Monitoramento");
+      	}
+
+    });
+    
+    function carregarCombos(){
+        document.getElementById('monitoramentoForm').action = _contexto + "/monitoramento/carregarCombos";
+        document.getElementById('monitoramentoForm').submit();   
+    }
+    
+    function consultar(){
+        document.getElementById('monitoramentoForm').action = _contexto + "/monitoramento/pesquisar";
+        document.getElementById('monitoramentoForm').submit();
+    }
+    //<![CDATA[
+     function irParaTelaConsultaMonitoramento(_idOrigem, _idPeriodo, _tipEvento, _idEvento, _agrupacaoStatus){
+         var url = _contexto + "/monitoramentoConsulta?origem=" + _idOrigem + "&periodo="  + _idPeriodo   + "&tipoEvento="  + _tipEvento + "&evento=" + _idEvento + "&agrupacaoStatus=" + _agrupacaoStatus;
+         window.location = url;
+     }
+     //]]>
+</script>
+
+<body class="fixed-sidebar">
+
+	<div id="wrapper">
+
+    <!-- Menu Lateral  -->
+    <nav th:replace="fragments/meuFragment :: menuLateralFragment"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+      
+        <!-- Cabeçalho --> 
+        <div th:replace="fragments/meuFragment :: menuSuperiorFragment"></div>
+
+        <!-- Conteúdo --> 
+        <div class="row">
+        <div class="col-lg-12">
+        <div id="ibox1" class="ibox ">
+        <div class="ibox-title">
+            <h3 class="text-navy"><i class="fa fa-eye"></i> Monitoramento de Eventos </h3>
+        </div>
+        <div class="ibox-content">
+            
+           <!-- Utilizado para spinner de Loading -->
+           <div class="sk-spinner sk-spinner-double-bounce">
+                <div class="sk-double-bounce1"></div>
+                <div class="sk-double-bounce2"></div>
+           </div>
+                            
+           <form id="monitoramentoForm" th:object="${monitoramentoForm}" method="post">
+           
+               <div class="form-group row">
+                   <label class="col-sm-2 col-form-label">Empregador:</label>
+                   <div class="col-sm-10">
+                       <div class="col-lg-12 m-l-n">
+                           <select id="empregador" th:field="*{empregador}" class="form-control m-b">
+                               <option value="">09.041.213/0001-36 - SÃO PAULO PREVIDÊNCIA - SPPREV</option>
+                               <option th:each="empregador : ${listaEmpregadores}" th:value="${empregador.idEmpregador}" th:text="${empregador.razaoSocial}"></option>
+                           </select>
+                       </div>
+                   </div>
+               </div>
+            
+               <div class="form-group row">
+                   <label class="col-sm-2 col-form-label"> <span  class="text-danger">* </span>Origem:</label>
+                   <div class="col-sm-10">
+                       <div class="col-lg-4 m-l-n">
+                            <select id="origem" th:field="*{origem}"  class="form-control m-b" onchange="carregarCombos()">
+                                 <option value="">Selecione</option>
+                                 <option th:each="origem : ${listaOrigens}" th:value="${origem.idOrigem}" th:text="${origem.nomeAbreviado}"></option>
+                            </select>
+                           <span class="text-danger">
+                               <label th:if="${#fields.hasErrors('origem')}" th:errors="*{origem}" class="validation-message"></label>
+                           </span>
+                        </div>
+                    </div>
+                </div>
+                            
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"> <span  class="text-danger">* </span>Período:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <select id="periodo" th:field="*{periodo}" class="form-control m-b">
+                                    <option value="">Selecione</option>
+                                    <option th:each="periodo : ${listaPeriodos}" th:value="${periodo.idPeriodo}" th:text="${periodo.periodo}"></option>
+                                </select>
+                                <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('periodo')}" th:errors="*{periodo}" class="validation-message"></label>
+                                </span>
+                            </div>
+                            
+                            <label class="col-sm-2 col-form-label">Tipo de Evento:</label>
+                            <div class="col-md-4">
+	                             <select id="tipoEvento" th:field="*{tipoEvento}" class="form-control m-b" onchange="carregarCombos()">
+	                                <option value="">Todos</option>
+	                                <option th:each="tipoEvento : ${listaTiposEvento}" th:value="${tipoEvento.codPar}" th:text="${tipoEvento.desDescricao}"></option>
+	                            </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Evento:</label>
+                    <div class="col-sm-10">
+                        <div class="col-lg-12 m-l-n">
+                             <select id="evento" th:field="*{evento}" class="form-control m-b">
+                                 <option value="">Todos</option>
+                                 <option th:each="evento : ${listaEventos}" th:value="${evento.idEvento}" th:text="${evento.descEvento}"></option>
+                              </select>
+                        </div>
+                    </div>
+                </div>
+
+               <div class="form-group row">
+                   <div class="col-sm-12">
+                       <div class="text-center">
+                           <button id="botaoConsultar" class="btn btn-primary dim btn-primary-dim" type="button" onclick="consultar();">Consultar</button>
+                       </div>
+                   </div>
+               </div>
+
+			  
+			  <div th:if="${listaTabelas != null}" class="row">
+					<div class="col-lg-12">
+						<div class="ibox ">
+							<div class="ibox-title">
+								<h5>
+									<i class="fa fa-table"></i> Eventos de Tabela
+								</h5>
+								<div class="ibox-tools">
+									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+								</div>
+							</div>
+
+							<div class="ibox-content">
+								<table class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th></th>
+											<th colspan="3">
+												<div class="text-center">Pré-envio</div>
+											</th>
+											<th colspan="4">
+											    <div class="text-center">Envio</div>
+											</th>
+										</tr>
+										<tr>
+											<th>Evento</th>
+											<th>Eventos Gerados</th>
+											<th>Eventos Validados</th>
+											<th>Eventos com Erro</th>
+											<th>Aguardando Envio</th>
+											<th>Eventos Enviados</th>
+											<th>Eventos com Erro</th>
+											<th>Eventos Finalizados</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="eventoTabela : ${listaTabelas}">
+											<td>
+											    <span th:text="${eventoTabela.codEvento} +' - '+ ${eventoTabela.descEvento}"></span>
+											</td>
+											<td align="center">
+												<a th:href="'javascript:irParaTelaConsultaMonitoramento('
+	                                                                           + ${eventoTabela.idOrigem} + ','
+	                                                                           + ${eventoTabela.idPeriodo} + ','
+	                                                                           + ${eventoTabela.tipEvento} + ','
+	                                                                           + ${eventoTabela.idEvento} + ','
+	                                                                           + ' \'Pré-Envio - Eventos Gerados\'' +  ');'">
+												<span class="text-navy" th:text="${eventoTabela.preEnvioEventosGerados}"></span>
+												</a>
+											</td>
+											<td align="center">
+											    <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Pré-Envio - Eventos Validados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.preEnvioEventosValidados}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Pré-Envio - Eventos Com Erro\'' +  ');'">
+													<span class="text-danger" th:text="${eventoTabela.preEnvioEventosComErro}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Envio - Aguardando Envio\'' +  ');'">
+													<span class="text-navy"	th:text="${eventoTabela.envioAguardandoEnvio}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Envio - Eventos Enviados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.envioEventosEnviados}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Eventos - Eventos Com Erro\'' +  ');'">
+													<span class="text-danger" th:text="${eventoTabela.envioEventosComErro}"></span>
+											     </a>
+											</td>
+											<td align="center">
+											    <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Eventos - Eventos Finalizados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.envioEventosFinalizados}"></span>
+											    </a>
+											</td>
+											<!--                                                                 <td class="text-navy"> <i class="fa fa-level-up"></i> 40% </td> -->
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div th:if="${listaNaoPeriodicos != null}" class="row">
+					<div class="col-lg-12">
+						<div class="ibox ">
+							<div class="ibox-title">
+								<h5>
+									<i class="fa fa-table"></i> Eventos não períodicos
+								</h5>
+								<div class="ibox-tools">
+									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+								</div>
+							</div>
+
+							<div class="ibox-content">
+								<table class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th></th>
+											<th colspan="3">
+												<div class="text-center">Pré-envio</div>
+											</th>
+											<th colspan="4">
+											    <div class="text-center">Envio</div>
+											</th>
+										</tr>
+										<tr>
+											<th>Evento</th>
+											<th>Eventos Gerados</th>
+											<th>Eventos Validados</th>
+											<th>Eventos com Erro</th>
+											<th>Aguardando Envio</th>
+											<th>Eventos Enviados</th>
+											<th>Eventos com Erro</th>
+											<th>Eventos Finalizados</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="eventoTabela : ${listaNaoPeriodicos}">
+											<td> <span th:text="${eventoTabela.codEvento} +' - '+ ${eventoTabela.descEvento}"></span>
+											</td>
+											<td align="center">
+												<a th:href="'javascript:irParaTelaConsultaMonitoramento('
+	                                                                           + ${eventoTabela.idOrigem} + ','
+	                                                                           + ${eventoTabela.idPeriodo} + ','
+	                                                                           + ${eventoTabela.tipEvento} + ','
+	                                                                           + ${eventoTabela.idEvento} + ','
+	                                                                           + ' \'Pré-Envio - Eventos Gerados\'' +  ');'">
+												<span class="text-navy" th:text="${eventoTabela.preEnvioEventosGerados}"></span>
+												</a>
+											</td>
+											<td align="center">
+											    <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Pré-Envio - Eventos Validados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.preEnvioEventosValidados}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Pré-Envio - Eventos Com Erro\'' +  ');'">
+													<span class="text-danger" th:text="${eventoTabela.preEnvioEventosComErro}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Envio - Aguardando Envio\'' +  ');'">
+													<span class="text-navy"	th:text="${eventoTabela.envioAguardandoEnvio}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Envio - Eventos Enviados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.envioEventosEnviados}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Eventos - Eventos Com Erro\'' +  ');'">
+													<span class="text-danger" th:text="${eventoTabela.envioEventosComErro}"></span>
+											     </a>
+											</td>
+											<td align="center">
+											    <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Eventos - Eventos Finalizados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.envioEventosFinalizados}"></span>
+											    </a>
+											</td>
+											<!--                                                                 <td class="text-navy"> <i class="fa fa-level-up"></i> 40% </td> -->
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div th:if="${listaPeriodicos != null}" class="row">
+					<div class="col-lg-12">
+						<div class="ibox ">
+							<div class="ibox-title">
+								<h5>
+									<i class="fa fa-table"></i> Eventos períodicos
+								</h5>
+								<div class="ibox-tools">
+									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+								</div>
+							</div>
+
+							<div class="ibox-content">
+								<table class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th></th>
+											<th colspan="3">
+												<div class="text-center">Pré-envio</div>
+											</th>
+											<th colspan="4"><div class="text-center">Envio</div></th>
+										</tr>
+										<tr>
+											<th>Evento</th>
+											<th>Eventos Gerados</th>
+											<th>Eventos Validados</th>
+											<th>Eventos com Erro</th>
+											<th>Aguardando Envio</th>
+											<th>Eventos Enviados</th>
+											<th>Eventos com Erro</th>
+											<th>Eventos Finalizados</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="eventoTabela : ${listaPeriodicos}">
+											<td> <span th:text="${eventoTabela.codEvento} +' - '+ ${eventoTabela.descEvento}"></span>
+											</td>
+											<td align="center">
+												<a th:href="'javascript:irParaTelaConsultaMonitoramento('
+	                                                                           + ${eventoTabela.idOrigem} + ','
+	                                                                           + ${eventoTabela.idPeriodo} + ','
+	                                                                           + ${eventoTabela.tipEvento} + ','
+	                                                                           + ${eventoTabela.idEvento} + ','
+	                                                                           + ' \'Pré-Envio - Eventos Gerados\'' +  ');'">
+												<span class="text-navy" th:text="${eventoTabela.preEnvioEventosGerados}"></span>
+												</a>
+											</td>
+											<td align="center">
+											    <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Pré-Envio - Eventos Validados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.preEnvioEventosValidados}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Pré-Envio - Eventos Com Erro\'' +  ');'">
+													<span class="text-danger" th:text="${eventoTabela.preEnvioEventosComErro}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Envio - Aguardando Envio\'' +  ');'">
+													<span class="text-navy"	th:text="${eventoTabela.envioAguardandoEnvio}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Envio - Eventos Enviados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.envioEventosEnviados}"></span>
+											    </a>
+											</td>
+											<td align="center">
+											     <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Eventos - Eventos Com Erro\'' +  ');'">
+													<span class="text-danger" th:text="${eventoTabela.envioEventosComErro}"></span>
+											     </a>
+											</td>
+											<td align="center">
+											    <a th:href="'javascript:irParaTelaConsultaMonitoramento('
+                                                                           + ${eventoTabela.idOrigem} + ','
+                                                                           + ${eventoTabela.idPeriodo} + ','
+                                                                           + ${eventoTabela.tipEvento} + ','
+                                                                           + ${eventoTabela.idEvento} + ','
+                                                                           + ' \'Eventos - Eventos Finalizados\'' +  ');'">
+													<span class="text-navy" th:text="${eventoTabela.envioEventosFinalizados}"></span>
+											    </a>
+											</td>
+											<!--                                                                 <td class="text-navy"> <i class="fa fa-level-up"></i> 40% </td> -->
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</form>
+            </div>
+        </div>
+    </div>
+</div>
+        
+<div th:replace="fragments/meuFragment :: footerFragment"></div>
+</div>
+</div>
+
+</body>
+</html>

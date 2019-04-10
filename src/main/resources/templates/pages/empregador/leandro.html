@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/meuFragment :: headFragment"></head>
+<!--     <meta charset="utf-8"> -->
+
+
+<body class="fixed-sidebar">
+
+	<div id="wrapper">
+
+    <!-- Menu Lateral  -->
+    <nav th:replace="fragments/meuFragment :: menuLateralFragment"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+      
+        <!-- Cabeçalho --> 
+        <div th:replace="fragments/meuFragment :: menuSuperiorFragment"></div>
+
+        <!-- Conteúdo --> 
+        <div class="row">
+        <div class="col-lg-12">
+        <div id="ibox1" class="ibox ">
+        <div class="ibox-title">
+            <h3 class="text-navy"><i class="fa fa-eye"></i> Tela Leandro </h3>
+        </div>
+        <div class="ibox-content">
+            
+               <form id="monitoramentoForm"  method="post">
+           
+               <div class="form-group row">
+                   <label class="col-sm-2 col-form-label">Empregador:</label>
+                   <div class="col-sm-10">
+                       <div class="col-lg-12 m-l-n">
+                           <select id="empregador" class="form-control m-b">
+                               <option value="">09.041.213/0001-36 - SÃO PAULO PREVIDÊNCIA - SPPREV</option>                               
+                           </select>
+                       </div>
+                   </div>
+               </div>
+            
+               <div class="form-group row">
+                   <label class="col-sm-2 col-form-label"> <span  class="text-danger">* </span>Origem:</label>
+                   <div class="col-sm-10">
+                       <div class="col-lg-4 m-l-n">
+                            <select id="origem" class="form-control m-b">
+                                 <option value="">Selecione</option>                               
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                            
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"> <span  class="text-danger">* </span>Período:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <select id="periodo" class="form-control m-b">
+                                    <option value="">Selecione</option>                                    
+                                </select>                       
+                            </div>
+                            
+                            <label class="col-sm-2 col-form-label">Tipo de Evento:</label>
+                            <div class="col-md-4">
+                        <select id="periodo" class="form-control m-b">
+                                    <option value="">Selecione</option>                                    
+                                </select>   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Evento:</label>
+                    <div class="col-sm-10">
+                        <div class="col-lg-12 m-l-n">
+                             <select id="evento" class="form-control m-b">
+                                 <option value="">Todos</option>                               
+                              </select>
+                        </div>
+                    </div>
+                </div>
+
+               <div class="form-group row">
+                   <div class="col-sm-12">
+                       <div class="text-center">
+                           <button id="botaoConsultar" class="btn btn-primary dim btn-primary-dim" type="button">Consultar</button>
+                       </div>
+                   </div>
+               </div>
+               
+               </form></div></div></div></div></div></div></body></html>

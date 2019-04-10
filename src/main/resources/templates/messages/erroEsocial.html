@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/meuFragment :: headFragment"></head>
+<!--     <meta charset="utf-8"> -->
+
+<body class="gray-bg">
+
+
+    <div class="middle-box text-center animated fadeInDown">
+           <div>
+                 <img th:src="@{/imagens/logo_esocial.png}"  width="300" height="200" alt="Logo"/>
+            </div>
+        <h3 class="font-bold">Erro de processamento no servidor.</h3>
+
+        <div class="error-desc">
+            No servidor ocorreu um erro inesperado, caso esteja vendo essa mensagem, por favor avisar ao suporte - Atlantic Solutions<br/><br/><br/>
+            Você pode voltar para a página inicial através do botão: <br/> <a th:href="@{/monitoramento}" class="btn btn-primary m-t">Home</a>
+            <br/><br/>
+             <span th:text="${exception}"></span>
+        </div>
+        
+        <br/>
+    </div>
+
+
+</body>
+
+</html>

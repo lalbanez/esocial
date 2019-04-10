@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/meuFragment :: headFragment"></head>
+<!--     <meta charset="utf-8"> -->
+
+<script th:inline="javascript">
+
+    $( document ).ready(function() {
+    	
+    	$('#calculadoraForm').submit(function (event) {
+ 	    	//if(!confirm("Deu erro"))
+ 	    	//	event.preventDefault(); // Impede que o o submit seja ralizado
+ 	    });
+    	
+    	
+    	$('#botaoTeste').on("click", function(event) {
+    		$('#calculadoraForm').attr("action", _contexto + "/calculadora/teste"); 
+    		$('#calculadoraForm').submit();
+    	});
+    	
+    	$('#botaoSomar').on("click", function(event) {
+    		$('#calculadoraForm').attr("action", _contexto + "/calculadora/soma"); 
+    		$('#calculadoraForm').submit();
+    	});
+    	
+    	$('#botaoSubtrair').on("click", function(event) {
+    		$('#calculadoraForm').attr("action", _contexto + "/calculadora/subtracao"); 
+    		$('#calculadoraForm').submit();
+    	});
+    	
+    	$('#botaoMultiplicar').on("click", function(event) {
+    		$('#calculadoraForm').attr("action", _contexto + "/calculadora/multiplicacao"); 
+    		$('#calculadoraForm').submit();
+    	});
+    	
+    	$('#botaoDividir').on("click", function(event) {
+    		$('#calculadoraForm').attr("action", _contexto + "/calculadora/divisao"); 
+    		$('#calculadoraForm').submit();
+    	});
+    	
+    });
+    
+</script>
+
+<body class="fixed-sidebar">
+
+	<div id="wrapper">
+
+    <!-- Menu Lateral  -->
+    <nav th:replace="fragments/meuFragment :: menuLateralFragment"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+      
+        <!-- Cabeçalho --> 
+        <div th:replace="fragments/meuFragment :: menuSuperiorFragment"></div>
+
+        <!-- Conteúdo --> 
+        <div class="row">
+        <div class="col-lg-12">
+        <div id="ibox1" class="ibox ">
+        <div class="ibox-title">
+            <h3 class="text-navy"><i class="fa fa-calculator"></i> Calculadora </h3>
+        </div>
+        <div class="ibox-content">
+            
+           <!-- Utilizado para spinner de Loading -->
+           <div class="sk-spinner sk-spinner-double-bounce">
+                <div class="sk-double-bounce1"></div>
+                <div class="sk-double-bounce2"></div>
+           </div>
+                            
+			<form id="calculadoraForm" th:object="${calculadoraForm}" method="post">
+			
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">
+						<span class="text-danger">* </span><b>Valor 1:</b>
+					</label>
+					<div class="col-sm-10">
+						<div class="row">
+							<div class="col-sm-4">
+								<input type="text" class="form-control" th:field="*{numero1}" />
+							</div>
+							<span class="text-danger">
+                               <label th:if="${#fields.hasErrors('numero1')}" th:errors="*{numero1}" class="validation-message"></label>
+                           </span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">
+						<span class="text-danger">* </span><b>Valor 2:</b>
+					</label>
+					<div class="col-sm-10">
+						<div class="row">
+							<div class="col-sm-4">
+								<input type="text" class="form-control" th:field="*{numero2}"  />
+							</div>
+							<span class="text-danger">
+                               <label th:if="${#fields.hasErrors('numero2')}" th:errors="*{numero2}" class="validation-message"></label>
+                           </span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<div class="col-sm-10">
+						<div class="row">
+							<div class="col-sm-4">
+								<h2><b>Resultado: </b> <span th:text="*{resultado}"></span></h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			
+			<div class="form-group row">
+					<div class="col-sm-12">
+						<div class="text-center">
+							<button id="botaoSomar"	class="btn btn-primary dim btn-primary-dim">
+								SOMAR
+							</button>
+							
+							<button id="botaoTeste"	value="teste" class="btn btn-primary dim btn-primary-dim">
+								TESTE
+							</button>
+							
+							<button id="botaoSubtrair"	class="btn btn-info dim btn-info-dim">
+								SUBTRAIR
+							</button>
+							<button id="botaoMultiplicar"	class="btn btn-danger dim btn-danger-dim">
+								MULTIPLICAR
+							</button>
+							
+							<button id="botaoDividir"	class="btn btn-success dim btn-success-dim">
+								DIVIDIR
+							</button>
+							
+						</div>
+					</div>
+				</div>
+		
+			
+			</div>
+        </div>
+    </div>
+</div>
+        
+<div th:replace="fragments/meuFragment :: footerFragment"></div>
+</div>
+</div>
+
+</body>
+</html>

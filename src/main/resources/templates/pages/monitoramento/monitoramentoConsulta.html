@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/meuFragment :: headFragment"/>
+<!--     <meta charset="utf-8"> -->
+
+<script th:inline="javascript">
+
+
+$(document).ready(function(){
+	
+	if([[${pesquisaRealizada}]] == 'registroEncontrado'){
+        toastr.success("Pesquisa realizada com sucesso.", "Consulta Monitoramento");
+	}else if([[${pesquisaRealizada}]] == 'registroNaoEncontrado'){
+		toastr.warning("Não foram encontrados eventos para os filtros selecionados.", "Consulta Monitoramento");
+	}
+	
+});
+
+  //<![CDATA[
+        $(document).ready(function(){
+        	
+        	
+        	
+            $('.dataTables-example').DataTable({
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "Nenhum registro encontrado",
+                    "search":         "Buscar:",
+                    "info": "Mostrando página _PAGE_ de _PAGES_ (_TOTAL_ registros)",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(filtrando de _MAX_ registros)",
+                    buttons: {
+                        copyTitle: 'Tabela copiada com sucesso',
+                        copySuccess: {
+                            _: '%d linhas copiadas.',
+                            1: '1 linha copiada.',
+                            0: 'Nenhuma linha foi copiada.'
+                        }
+                    },
+                    "paginate": {
+                        "first":      "Primeira",
+                        "last":       "Última",
+                        "next":       "Próximo",
+                        "previous":   "Anterior"
+                    },
+                },
+                
+                pageLength: 25,
+                responsive: true,
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    { extend: 'copy', text: 'Copiar',},
+                    {extend: 'excel', title: 'Monitoramento'},
+                    {extend: 'print',text: 'Imprimir',
+                     customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    }
+                    }
+                ]
+
+            });
+            
+            
+            $('#data_1').datepicker({
+                todayBtn: "linked",
+                format: 'dd/mm/yyyy',
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: false,
+                autoclose: true
+            });
+            
+            
+            $('#data_2').datepicker({
+                todayBtn: "linked",
+                format: 'dd/mm/yyyy',
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: false,
+                autoclose: true
+            });
+            
+             $('#data_3').datepicker({
+                 todayBtn: "linked",
+                 format: 'dd/mm/yyyy',
+                 keyboardNavigation: false,
+                 forceParse: false,
+                 calendarWeeks: false,
+                 autoclose: true
+            });
+             
+
+        });
+        //]]>
+
+    //<![CDATA[
+    function habilitaCamposForm(formName) {
+    	for (i=0; i < formName.elements.length; i++) {
+    		if (formName.elements[i].type != 'hidden') {
+    			formName.elements[i].disabled = false;
+    		}
+    	}
+    }
+    //]]>
+    
+    
+  //<![CDATA[
+    function verificarConsulta(){
+    	with (document.forms[0]) {
+    		
+    		//TODO refatorar dps
+    		if(tipoEvento.value == '2'){
+        		if(idEvento.value == '' && numLote.value == '' && dataEnvio.value == '' && protocoloEnvio.value == ''
+        			&& dataRetorno.value == '' && numRecibo.value == '' && dataGeracao.value == '' && numCpf.value == ''
+        				&& descStatus.value == ''){	
+        			 $('#myModal2').modal();
+        		}else{
+        			consultar();
+        		}
+    		}else{
+        		if(idEvento.value == '' && numLote.value == '' && dataEnvio.value == '' && protocoloEnvio.value == ''
+        			&& dataRetorno.value == '' && numRecibo.value == '' && dataGeracao.value == '' 
+        				&& descStatus.value == ''){	
+        			 $('#myModal2').modal();
+        		}else{
+        			consultar();
+        		}
+    		}
+    	}
+    }
+    //]]>
+  
+    function consultar(){
+    	 $('#myModal2').modal('hide');
+        habilitaCamposForm(document.forms[0]);
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        document.getElementById('monitoramentoConsultaForm').action = _contexto + "/monitoramentoConsulta/pesquisar";
+        document.getElementById('monitoramentoConsultaForm').submit();
+    }
+    
+    //<![CDATA[
+    function irParaTelaEmpregador(_idEmpregador){
+        habilitaCamposForm(document.forms[0]);
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        document.getElementById('monitoramentoConsultaForm').action = _contexto + "/triat/carregarPagina?idEmpregador=" + _idEmpregador;
+        document.getElementById('monitoramentoConsultaForm').submit();
+    }
+    
+    function irParaTelaRubricas(_idRubrica){
+        habilitaCamposForm(document.forms[0]);
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        document.getElementById('monitoramentoConsultaForm').action = _contexto + "/s1010?idRubricaConsulta=" + _idRubrica;
+        document.getElementById('monitoramentoConsultaForm').submit();
+    }
+    
+    
+    //http://localhost:8080/s1010?idRubricaConsulta=6501004&isDetalhe=1
+    //]]>
+	     
+    
+  //<![CDATA[
+    function irParaTelaEmpregadorDetalhe(_idEmpregador){
+        habilitaCamposForm(document.forms[0]);
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        document.getElementById('monitoramentoConsultaForm').action = _contexto + "/triat/carregarPaginaDetalhe?idEmpregador=" + _idEmpregador;
+        document.getElementById('monitoramentoConsultaForm').submit();
+    }
+    
+    function irParaTelaRubricasDetalhe(_idRubrica){
+        habilitaCamposForm(document.forms[0]);
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        document.getElementById('monitoramentoConsultaForm').action = _contexto + "/s1010?idRubricaConsulta=" + _idRubrica + "&isDetalhe=1";
+        document.getElementById('monitoramentoConsultaForm').submit();
+    }
+    
+    //]]>
+  
+  
+    function voltar(){
+    	with (document.forms[0]) {
+            $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+//             document.getElementById('triatForm').action = _contexto + "/monitoramento";
+//             document.getElementById('triatForm').submit();
+//     		window.history.back();
+
+            var url = _contexto + "/monitoramento";
+            window.location = url;
+    	}
+    }
+</script>
+    
+<body class="fixed-sidebar">
+
+	<div id="wrapper">
+
+    <!-- Menu Lateral  -->
+    <nav th:replace="fragments/meuFragment :: menuLateralFragment"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+      
+        <!-- Cabeçalho --> 
+        <div th:replace="fragments/meuFragment :: menuSuperiorFragment"></div>
+
+        <!-- Conteúdo --> 
+        <div class="row">
+        <div class="col-lg-12">
+        <div  id="ibox1" class="ibox ">
+        <div class="ibox-title">
+            <h3 class="text-navy"><i class="fa fa-eye"></i> Monitoramento de Eventos - Consulta Detalhada </h3>
+        </div>
+        <div class="ibox-content">
+        
+           <!-- Utilizado para spinner de Loading -->
+           <div class="sk-spinner sk-spinner-double-bounce">
+                <div class="sk-double-bounce1"></div>
+                <div class="sk-double-bounce2"></div>
+           </div>
+           
+               <div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+                   <div class="modal-dialog">
+                       <div class="modal-content animated flipInY">
+                           <div class="modal-header">
+                               <h4 class="modal-title">Monitoramento</h4>
+                               <small class="font-bold">Consulta Detalhada dos Eventos de Monitoramento</small>
+                           </div>
+                           <div class="modal-body">
+                               <p>Você está tentando realizar uma pesquisa <strong>sem filtro</strong>, dependendo da quantidade de eventos, a consulta pode ser longa, 
+                               tem certeza que deseja continuar?</p>
+                           </div>
+                           <div class="modal-footer">
+                               <button type="button" class="btn btn-white" data-dismiss="modal">Fechar</button>
+                               <button type="button" class="btn btn-primary" onclick="consultar()">Pesquisar</button>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+        
+            <form id="monitoramentoConsultaForm" th:object="${monitoramentoConsultaForm}" method="post">
+            <input type="hidden" th:field="*{tipoEvento}" />
+            <input type="hidden" th:field="*{agrupacaoStatus}" />
+           
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Origem:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+	                            <select id="origem" th:field="*{origem}" class="form-control m-b" disabled="disabled">
+	                                <option value="">Selecione</option>
+	                                <option th:each="origem : ${listaOrigens}" th:value="${origem.idOrigem}" th:text="${origem.nomeAbreviado}"></option>
+	                            </select>
+	                            <span class="text-danger">
+	                                <label th:if="${#fields.hasErrors('origem')}" th:errors="*{origem}" class="validation-message"></label>
+	                            </span>
+                            </div>
+                            
+                            <label class="col-sm-2 col-form-label">Período:</label>
+                            <div class="col-md-4">
+                                <select id="periodo" th:field="*{periodo}" class="form-control m-b" disabled="disabled">
+                                    <option value="">Selecione</option>
+                                    <option th:each="periodo : ${listaPeriodos}" th:value="${periodo.idPeriodo}" th:text="${periodo.periodo}"></option>
+                                 </select>
+                                 <span class="text-danger"> <label th:if="${#fields.hasErrors('periodo')}" th:errors="*{periodo}" class="validation-message"></label></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                   
+                   
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Evento:</label>
+                     <div class="col-sm-10">
+                         <div class="col-lg-12 m-l-n">
+                             <select id="evento" th:field="*{evento}" class="form-control m-b" disabled="disabled">
+                                 <option value="">Todos</option>
+                                 <option th:each="evento : ${listaEventos}" th:value="${evento.idEvento}" th:text="${evento.descEvento}"></option>
+                             </select>
+                        </div>
+                    </div>
+               </div>     
+                   
+                   
+               <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">ID Evento:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" th:field="*{idEvento}" maxlength="36"/>
+                            </div>
+                            
+                            <label class="col-sm-2 col-form-label">Número do Lote:</label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" th:field="*{numLote}" maxlength="16" onkeypress="return apenasNumeros(event)"/>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+                
+                
+               <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Data de Envio:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                 <div class="input-group date" id="data_1">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" th:field="*{dataEnvio}" data-mask="99/99/9999" />
+                                </div>
+                               <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('dataEnvio')}" th:errors="*{dataEnvio}" class="validation-message"></label>
+                                </span>
+                            </div>
+                            
+                            <label class="col-sm-2 col-form-label">Protocolo de Envio:</label>
+                            <div class="col-md-4">
+                                 <input type="text" class="form-control" th:field="*{protocoloEnvio}" maxlength="40" onkeypress="return apenasNumeros(event)"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 
+                
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Data de Retorno:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                 <div class="input-group date" id="data_2">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" th:field="*{dataRetorno}" data-mask="99/99/9999" />
+                                </div>
+                                 <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('dataRetorno')}" th:errors="*{dataRetorno}" class="validation-message"></label>
+                                </span>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Número do Recibo:</label>
+                            <div class="col-md-4">
+                                 <input type="text" class="form-control" th:field="*{numRecibo}" maxlength="40" onkeypress="return apenasNumeros(event)"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>                 
+                 
+                
+                
+                
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Data de Geração:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                 <div class="input-group date" id="data_3">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" th:field="*{dataGeracao}" data-mask="99/99/9999" />
+                                </div>
+                                <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('dataGeracao')}" th:errors="*{dataGeracao}" class="validation-message"></label>
+                                </span>
+                            </div>
+                            
+                                <!-- Aparecer apenas para eventos do tipo não periódicos -->
+	                            <label th:if="*{tipoEvento} == 2" class="col-sm-2 col-form-label">CPF:</label>
+	                            <div th:if="*{tipoEvento} == 2"   class="col-md-4" >
+	                                  <input type="text" class="form-control" data-mask="999.999.999-99" th:field="*{numCpf}"/>
+	                            <span class="text-danger"> 
+                                    <label th:if="${#fields.hasErrors('numCpf')}" th:errors="*{numCpf}" class="validation-message"></label>
+                                </span>
+	                            </div>
+	                
+                        </div>
+                    </div>
+                </div>              
+                
+ 
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Status:</label>
+                    <div class="col-sm-10">
+                        <div class="col-lg-12 m-l-n">
+                            <select th:field="*{descStatus}" class="form-control m-b">
+                                <option value="">Todos</option>
+                                <option th:each="status : ${listaStatus}" th:value="${status.key}" th:text="${status.value}"></option> 
+                            </select>
+                        </div>
+                    </div>
+               </div>     
+                   
+                   
+               <div class="form-group row">
+                   <div class="col-sm-12">
+                       <div class="text-center">
+                           <button id="botaoVoltar" class="btn btn-primary dim btn-primary-dim" type="button" onclick="voltar();">Voltar</button>
+                           <button id="botaoFiltrar" class="btn btn-primary dim btn-primary-dim" type="button" onclick="verificarConsulta();">Filtrar</button>
+                       </div>
+                   </div>
+               </div>
+                   
+          <div class="row">
+		      <div class="col-lg-12">
+			      <div class="ibox ">
+			          <div class="ibox-title">
+			          
+                          <h5 class="text-navy"><span th:text="${monitoramentoConsultaForm.agrupacaoStatus}"></span></h5>
+                                                        
+                          <div class="ibox-tools">
+                              <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>  
+                          </div>
+                       </div>
+                       
+			           <div class="ibox-content">
+			               <table class="table">
+			                   <thead>
+			                       <tr>
+			                           <th>Período</th>
+			                           <th>Origem</th>
+			                           <th>Evento</th>
+			                           <th>Status do Evento</th>
+			                           <th>Total de Eventos</th>
+			                       </tr>
+			                    </thead>
+			                    <tbody>
+			                        <tr th:each="statusEvento : ${listaStatusEvento}">
+			                            <td><span th:text="${statusEvento.descPeriodo}"></span></td>
+			                            <td><span th:text="${statusEvento.descOrigem}"></span></td>
+			                            <td><span th:text="${statusEvento.descEvento}"></span></td>
+			                            <td><span th:text="${statusEvento.descStatusEvento}"></span></td>
+			                            <td><span th:text="${statusEvento.totalStatusEvento}"></span></td>
+			                         </tr>
+			                         <tr>
+			                             <td><b>TOTAL</b></td>
+			                             <td></td>
+			                             <td></td>
+			                             <td></td>
+			                             <td><b><span th:text="${totalStatus}"></span></b></td>
+			                         </tr>
+			                     </tbody>
+			                 </table>
+			             </div>
+			         </div>
+			     </div>
+            </div>
+                                            
+                                            
+                                            
+        <div class="wrapper wrapper-content animated fadeInRight" th:if="${listaDetalhes != null}">
+            <div class="row">
+                <div class="col-lg-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5><i class="fa fa-table"></i> Listagem de Eventos</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover dataTables-example" >
+                                <thead>
+                                    <tr>
+                                       <th>Período</th>
+                                       <th>Origem</th>
+                                       <th>Evento</th>
+                                       <th>Status do Evento</th>
+                                       <th>ID Evento</th>
+                                       <th>Protocolo de Envio</th>
+                                       <th>Nº Recibo</th>
+                                       <th>Data de Geração</th>
+                                       <th>Data de Envio</th>
+                                       <th>Data de Retorno</th>
+                                       <th>Ver</th>
+                                       <th>Ajuste</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr th:each="detalhe : ${listaDetalhes}">
+		                                   <td><span th:text="${detalhe.periodo}"></span></td>
+		                                   <td><span th:text="${detalhe.origem}"></span></td>
+		                                   <td><span th:text="${detalhe.evento}"></span></td>
+		                                   <td><span th:text="${detalhe.statusEvento}"></span></td>
+		                                   <td><span th:text="${detalhe.idEvento}"></span></td>
+		                                   <td><span th:text="${detalhe.protocoloEnvio}"></span></td>
+		                                   <td><span th:text="${detalhe.numRecibo}"></span></td>
+		                                   <td><span th:text="${detalhe.dataGeracao}"></span></td>
+		                                   <td><span th:text="${detalhe.dataEnvio}"></span></td>
+		                                   <td><span th:text="${detalhe.dataRetorno}"></span></td>
+		                                   <td>
+		                                      <a th:if="${detalhe.codEvento} == 1000" th:href="'javascript:irParaTelaEmpregadorDetalhe(' + ${detalhe.idEmpregador} + ');'">
+		                                  	      <i class="fa fa-search"></i>
+		                                      </a>
+		                                      <a th:if="${detalhe.codEvento} == 1010" th:href="'javascript:irParaTelaRubricasDetalhe(' + ${detalhe.codRubrica} + ');'">
+		                                  	      <i class="fa fa-search"></i>
+		                                      </a>
+		                                   </td>
+		                                   <td>
+		                                      <a th:if="${detalhe.codEvento} == 1000" th:href="'javascript:irParaTelaEmpregador(' + ${detalhe.idEmpregador} + ');'">
+		                                  	      <i class="fa fa-gear"></i>
+		                                      </a>
+		                                      <a th:if="${detalhe.codEvento} == 1010" th:href="'javascript:irParaTelaRubricas('+${detalhe.codRubrica}+');'">
+		                                      <!-- + ${detalhe.idEvento} + -->
+		                                  	      <i class="fa fa-gear"></i>
+		                                      </a>
+		                                      
+		                                   </td>		                                   
+			                           </tr>
+                                  </tbody>
+                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+      </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div th:replace="fragments/meuFragment :: footerFragment"></div>
+    </div>
+</div>
+
+</body>
+</html>

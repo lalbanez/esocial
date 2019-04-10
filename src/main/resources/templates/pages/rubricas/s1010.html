@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/meuFragment :: headFragment"></head>
+<!--     <meta charset="utf-8"> -->
+
+<script type="text/javascript" >
+//<![CDATA[
+	
+	
+	
+	$(document).ready(function () {
+		if($("#detalhe").val() == 1){
+			$("#s1010Form :input").prop("disabled", true);
+			$("#botaoVoltar").prop("disabled", false);
+		}
+	})
+	
+	
+	function habilitaCamposForm(formName) {
+	    for (i=0; i < formName.elements.length; i++) {
+	        if (formName.elements[i].type != 'hidden') {
+	            formName.elements[i].disabled = false;
+	        }
+	    }
+	}
+	//]]>
+	function exibirCamposProcesso(acao){
+		
+		if(acao == "INCLUIR"){
+			$("#tipoProcesso").val("");
+			$("#numProcesso").val("");
+			$("#extensaoDecisao").val("");
+			$("#codSuspensao").val("");
+		}
+		
+		var opcao = $("#idProcesso :selected").val();
+
+		switch (opcao) {
+		case "":
+	    	$("#tipoProcessoLb").hide();
+	    	$("#tipoProcessoDiv").hide();
+	    	$("#numProcessoLb").hide();
+	    	$("#numProcessoDiv").hide();
+	    	$("#codSuspensaoLb").hide();
+	    	$("#codSuspensaoDiv").hide();
+	    	$("#extensaoDecisaoLb").hide();
+	    	$("#extensaoDecisaoDiv").hide();
+	    	$("#btnIncluir").hide();
+	    	break;
+	    case "1":
+	    	$("#tipoProcessoLb").show();
+	    	$("#tipoProcessoDiv").show();
+	    	$("#numProcessoLb").show();
+	    	$("#numProcessoDiv").show();
+	    	$("#codSuspensaoLb").show();
+	    	$("#codSuspensaoDiv").show();
+	    	$("#extensaoDecisaoLb").show();
+	    	$("#extensaoDecisaoDiv").show();
+	    	$("#btnIncluir").show();
+	    	break;
+	    case "2":
+	    	$("#tipoProcessoLb").hide();
+	    	$("#tipoProcessoDiv").hide();
+	    	$("#numProcessoLb").show();
+	    	$("#numProcessoDiv").show();
+	    	$("#codSuspensaoLb").show();
+	    	$("#codSuspensaoDiv").show();
+	    	$("#extensaoDecisaoLb").hide();
+	    	$("#extensaoDecisaoDiv").hide();
+	    	$("#btnIncluir").show();
+	    	break;
+	    case "3":
+	    case "4":
+	    	$("#tipoProcessoLb").hide();
+	    	$("#tipoProcessoDiv").hide();
+	    	$("#numProcessoLb").show();
+	    	$("#numProcessoDiv").show();
+	    	$("#codSuspensaoLb").hide();
+	    	$("#codSuspensaoDiv").hide();
+	    	$("#extensaoDecisaoLb").hide();
+	    	$("#extensaoDecisaoDiv").hide();
+	    	$("#btnIncluir").show();
+	    	break;
+	    case "5":
+	    	$("#tipoProcessoLb").show();
+	    	$("#tipoProcessoDiv").show();
+	    	$("#numProcessoLb").show();
+	    	$("#numProcessoDiv").show();
+	    	$("#codSuspensaoLb").hide();
+	    	$("#codSuspensaoDiv").hide();
+	    	$("#extensaoDecisaoLb").show();
+	    	$("#extensaoDecisaoDiv").show();
+	    	$("#btnIncluir").show();
+	    	break;
+		}	  
+	}
+		
+	function voltar(){
+		with (document.forms[0]) {
+	        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+	        var url = _contexto + "/monitoramento";
+	        window.location = url;
+		}
+	}
+	
+	function incluirProcesso(){
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+		$("#divProcessos").load(_contexto + "/s1010/incluir", 
+								{"idProcesso":$("#idProcesso").val(), 
+								"tpProcesso":$("#tipoProcesso").val(), 
+								"numProcesso":$("#numProcesso").val(),
+								"extDecisao":$("#extensaoDecisao").val(),
+								"codSuspensao":$("#codSuspensao").val()});
+	}
+	
+	function detalharProcesso(idProcesso, tipoProcesso, numProcesso, extDecisao, codSuspensao){
+		$("#idProcesso").val(idProcesso);
+		$("#tipoProcesso").val(tipoProcesso);
+		$("#numProcesso").val(numProcesso);
+		$("#extensaoDecisao").val(extDecisao);
+		$("#codSuspensao").val(codSuspensao);
+		
+		exibirCamposProcesso("ALTERAR");
+	}
+	
+	
+</script>
+
+
+<style>
+.ultEvt {
+border: 0px;
+background-color: #f3f3f4;
+
+}
+
+</style>
+
+<body class="fixed-sidebar">
+
+<form id="s1010Form"  th:object="${s1010Form}" th:action="@{/s1010/gravar}" method="post">
+<input id="detalhe" type="hidden" th:field="*{isDetalhe}" />
+
+	<div class="modal inmodal" id="detalheUltEvento" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <h4 class="modal-title">Rubricas</h4>
+                    <small class="font-bold text-navy"> Detalhe Dados do Último Evento Gerado</small>
+                </div>
+                                                        
+                <div class="modal-body">
+                  	 <div class="row">          
+	                       <div class="col-sm-12 text-left">
+			                   <b>ID do Evento:</b> <label th:text="*{idEventoUltEvGerado}"></label> 
+			                </div> 
+			                
+			                <div class="col-sm-6 text-left">
+			                   <b>Status de Evento:</b> <label th:text="*{statusEventoUltEvGerado}"></label>
+			                </div> 
+	                       <div class="col-sm-6 text-left">
+			                   <b>Data de Geração:</b> <label th:text="*{dtGeracaoUltEvGerado}"></label>
+			                </div> 
+			                
+	                       <div class="col-sm-6 text-left">
+			                   <b>Nº do Lote:</b> <label th:text="*{numLoteUltEvGerado}"></label>
+			                </div> 
+	                       <div class="col-sm-6 text-left">
+			                   <b>Data de Envio:</b>  <label th:text="*{dataEnvioUltEvGerado}"></label>
+			                </div>   
+		             
+	                       <div class="col-sm-12 text-left">
+			                   <b>Nº Protocolo de Envio:</b> <label th:text="*{numProtocoloEnvioUltEvGerado}"></label>
+			                </div> 
+	
+	                       <div class="col-sm-6 text-left">
+			                   <b>Nº Recibo:</b> <label th:text="*{numReciboUltEvGerado}"></label>
+			                </div> 
+	                       <div class="col-sm-6 text-left">
+			                   <b>Data de Retorno:</b> <label th:text="*{dataRetornoUltEvGerado}"></label>
+			                </div>   
+		             
+	                       <div class="col-sm-12 text-left">
+			                   <b>Tipo de Ação:</b>  <label th:text="*{tipoAcaoUltEvGerado}"></label>
+			                </div> 
+		             
+	                       <div class="col-sm-6 text-left">
+			                   <b>Início Vigência:</b> <label th:text="*{iniVigenciaUltEvGerado}"></label>
+			                </div> 
+	                       <div class="col-sm-6 text-left">
+			                   <b>Fim Vigência:</b> <label th:text="*{fimVigenciaUltEvGerado}"></label>
+			                </div>   
+			                
+		        </div>                 
+		        </div>                          
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Fechar</button>                                         
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+	<div id="wrapper">
+
+		<!-- Menu Lateral  -->
+		<nav th:replace="fragments/meuFragment :: menuLateralFragment"></nav>
+
+		<div id="page-wrapper" class="gray-bg">
+
+			<!-- Cabeçalho -->
+			<div th:replace="fragments/meuFragment :: menuSuperiorFragment"></div>
+
+			<!-- Conteúdo -->
+			<br />
+
+			<div class="text-center">
+				<div id="ibox1" class="ibox">
+					<h3 class="text-navy">
+						<b>Manutenção de Evento S-1010 - Tabela de Rubricas</b>
+					</h3>
+				</div>
+			</div>
+
+			<h3 class="text-navy">Parâmetros de Cadastro</h3>
+			<div class="form-group row">
+				<div class="col-sm-10">
+					<div class="row">
+						<label class="col-sm-2 col-form-label"><b>Período Aberto:</b></label>
+						<div class="col-md-4">
+							<span>10/2018</span>
+						</div>
+						<label class="col-sm-2 col-form-label"><b>Tipo de Período:</b></label>
+						<div class="col-md-4">
+							<span>Normal</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<h3 class="text-navy">Dados do Último Evento Gerado</h3>
+			<div class="col-lg-12">
+				<div class="ibox">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>ID do Evento</th>
+									<th>Data da Geração</th>
+									<th>Tipo Ação</th>
+									<th>Início Vigência</th>
+									<th>Fim Vigência</th>
+									<th>Status do Evento</th>
+									<th>Detalhar</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td> <span th:text="${dadosUltimoEventoGerado.id}">     </span> </td>
+									<td> <span th:text="${dadosUltimoEventoGerado.dat_ing}">    </span> </td>
+									<td> <span th:text="*{tipoAcaoUltEvGerado}">     </span> </td>
+									<td> <span th:text="*{iniVigenciaUltEvGerado}">  </span> </td>
+									<td> <span th:text="*{fimVigenciaUltEvGerado}">  </span> </td>
+									<td> <span th:text="*{statusEventoUltEvGerado}"> </span> </td>
+									<td>
+										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detalheUltEvento">Detalhar</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		
+			<div class="row">
+				<div class="col-lg-12">
+					<div id="ibox1" class="ibox ">
+						<div class="ibox-content">
+
+								<h4 class="text-navy">Identificação do Evento</h4>
+
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">
+										<span class="text-danger">* </span><b>Identificação do Ambiente:</b>
+									</label>
+									<div class="col-sm-10">
+										<div class="row">
+											<div class="col-md-4">
+												<select id="periodo" class="form-control m-b" th:field="*{identificacaoAmbiente}" disabled="disabled">
+													<option value="">Selecione</option>
+													<option th:each="codigo : ${listaIdentificacaoAmbiente}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+												</select>
+												<span class="text-danger">
+					                               <label th:if="${#fields.hasErrors('identificacaoAmbiente')}" th:errors="*{identificacaoAmbiente}" class="validation-message"></label>
+                    							</span> 
+											</div>
+
+											<label class="col-sm-2 col-form-label">
+												<span class="text-danger">* </span><b>Versão do Processo de Emissão do Evento:</b></label>
+											<div class="col-md-4">
+												<input type="text" class="form-control" maxlength="20" th:field="*{versaoProcessoEmissaoEvento}" disabled="disabled"/>
+												<span class="text-danger">
+					                               <label th:if="${#fields.hasErrors('versaoProcessoEmissaoEvento')}" th:errors="*{versaoProcessoEmissaoEvento}" class="validation-message"></label>
+                    							</span> 
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">
+										<span class="text-danger">* </span><b>Processo de Emissão do Evento:</b>
+									</label>
+									<div class="col-sm-10">
+										<div class="col-lg-4 m-l-n">
+											<select class="form-control m-b" disabled="disabled" th:field="*{processoEmissaoEvento}">
+												<option th:each="codigo : ${listaProcessoEmissaoEvento}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+											</select>
+											<span class="text-danger">
+					                        	<label th:if="${#fields.hasErrors('processoEmissaoEvento')}" th:errors="*{processoEmissaoEvento}" class="validation-message"></label>
+                    						</span>  
+										</div>
+									</div>
+								</div>
+								
+								<h4 class="text-navy">Identificação do Empregador</h4>
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label"> <b>Tipo de Inscrição:</b> </label>
+									<div class="col-sm-10">
+										<div class="row">
+											<div class="col-md-4">
+												<label class="col-sm-4 col-form-label" th:text="*{tipoInscricao}" ></label> 
+											</div>
+											<label class="col-sm-2 col-form-label"> <b>Nº Inscrição: </b> </label>
+											<div class="col-md-4">
+												<label class="col-sm-2 col-form-label" th:text="*{numInscricao}" ></label>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								
+								<h4 class="text-navy">Identificação da Operação das	Informações</h4>
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">
+										<span class="text-danger">*</span><b>Tipo de Ação:</b></label>
+									<div class="col-sm-10">
+										<div class="col-lg-4 m-l-n">
+											<select  class="form-control m-b" th:field="*{tipoAcaoOperacao}">
+												<option value="">Selecione</option>
+												<option th:each="codigo : ${listaTipoAcao}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+											</select>
+											<span class="text-danger">
+					                        	<label th:if="${#fields.hasErrors('tipoAcaoOperacao')}" th:errors="*{tipoAcaoOperacao}" class="validation-message"></label>
+                    						</span> 
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">
+										<span class="text-danger">* </span><b>Início Vigência:</b>
+									</label>
+									<div class="col-sm-10">
+										<div class="row">
+											<div class="col-md-4">
+												<input type="text" class="form-control" data-mask="9999-99" th:field="*{iniVigenciaOperacao}"/>
+												<span class="text-danger">
+					                        		<label th:if="${#fields.hasErrors('iniVigenciaOperacao')}" th:errors="*{iniVigenciaOperacao}" class="validation-message"></label>
+                    							</span> 
+											</div>
+
+											<label class="col-sm-2 col-form-label"><b>Fim Vigência:</b></label>
+											<div class="col-md-4">
+												<input type="text" class="form-control" data-mask="9999-99" th:field="*{fimVigenciaOperacao}"/>
+												<span class="text-danger">
+					                        		<label th:if="${#fields.hasErrors('fimVigenciaOperacao')}" th:errors="*{fimVigenciaOperacao}" class="validation-message"></label>
+                    							</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<br />
+
+								<div class="tabs-container">
+									<ul class="nav nav-tabs" role="tablist">
+										<li>
+											<a class="nav-link active" data-toggle="tab" href="#tab-1">
+												Rubrica
+											</a>
+										</li>
+
+										<li>
+											<a class="nav-link" data-toggle="tab" href="#tab-2"> 
+												Processo
+											</a>
+										</li>
+									</ul>
+									<div class="tab-content">
+									<!--  Aba Dados da Rubrica -->
+										<div role="tabpanel" id="tab-1" class="tab-pane active">
+											<div class="panel-body ">
+
+												<h4 class="text-navy">
+													<i class="fa fa-file-text"></i> Dados da Rubrica
+												</h4>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">
+														<span class="text-danger">* </span>Código da Rubrica:
+													</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4">
+																<input type="text" class="form-control" maxlength="15" th:field="*{codRubrica}"/>
+																<span class="text-danger">
+					                        						<label th:if="${#fields.hasErrors('codRubrica')}" th:errors="*{codRubrica}" class="validation-message"></label>
+                    											</span>
+															</div>
+															<label class="col-sm-2 col-form-label">
+																<span class="text-danger">* </span>Identificador da Rubrica:
+															</label>
+															<div class="col-sm-4">
+																	<input type="text" class="form-control" maxlength="15"  th:field="*{idRubrica}"/>
+																	<span class="text-danger">
+					                        							<label th:if="${#fields.hasErrors('idRubrica')}" th:errors="*{idRubrica}" class="validation-message"></label>
+                    												</span>
+															</div>															
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Natureza:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select class="form-control m-b" th:field="*{natureza}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaNatureza}" th:value="${codigo.codEsocial}" th:text="${codigo.codEsocial} + ' - ' + ${codigo.desEsocial}"></option>
+															</select>
+ 
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('natureza')}" th:errors="*{natureza}" class="validation-message"></label>
+                    										</span>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Tipo de Rubrica:</label>
+													<div class="col-sm-4">
+														<div class="col-lg-12 m-l-n">
+															<select class="form-control m-b" th:field="*{tipoRubrica}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaTipoRubrica}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+															</select>
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('tipoRubrica')}" th:errors="*{tipoRubrica}" class="validation-message"></label>
+                    										</span>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Incidência para Previdência Social:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select class="form-control m-b" th:field="*{incidenciaPrevSocial}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaIncidenciaPrevSocial}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+															</select>
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('incidenciaPrevSocial')}" th:errors="*{incidenciaPrevSocial}" class="validation-message"></label>
+                    										</span>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Incidência para IRRF:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select class="form-control m-b" th:field="*{incidenciaIRRF}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaIncidenciaIRRF}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+															</select>
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('incidenciaIRRF')}" th:errors="*{incidenciaIRRF}" class="validation-message"></label>
+                    										</span>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Incidência para FGTS:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" th:field="*{incidenciaFGTS}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaIncidenciaFGTS}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+															</select>
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('incidenciaFGTS')}" th:errors="*{incidenciaFGTS}" class="validation-message"></label>
+                    										</span>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Incidência para Contribuição Sindical:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select class="form-control m-b" th:field="*{incidenciaContribSindical}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaContribSindical}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+															</select>
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('incidenciaContribSindical')}" th:errors="*{incidenciaContribSindical}" class="validation-message"></label>
+                    										</span> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Incidência para Contribuições RPPS/Regime Militar:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select class="form-control m-b" th:field="*{incidenciaContribRPPS}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaIncidenciaContribRPPS}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+															</select> 
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('incidenciaContribRPPS')}" th:errors="*{incidenciaContribRPPS}" class="validation-message"></label>
+                    										</span> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"><span class="text-danger">* </span>Teto Remuneratório:</label>
+													<div class="col-sm-4">
+														<div class="col-lg-12 m-l-n">
+															<select class="form-control m-b" th:field="*{tetoRemuneratorio}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaSimNao}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+															</select> 
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('tetoRemuneratorio')}" th:errors="*{tetoRemuneratorio}" class="validation-message"></label>
+                    										</span> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Observação:</label>
+													<div class="col-sm-10" th:field="*{observacao}">
+														<div class="col-lg-12 m-l-n">
+															<textarea rows="4" cols="100">
+															</textarea>
+														</div>
+														<span class="text-danger">
+					                        				<label th:if="${#fields.hasErrors('observacao')}" th:errors="*{observacao}" class="validation-message"></label>
+                    									</span>
+													</div>
+												</div>
+
+
+											</div>
+										</div>
+
+										<!--  Aba Processo -->
+										<div role="tabpanel" id="tab-2" class="tab-pane">
+											<div class="panel-body ">
+											
+												<h4 class="text-navy">
+													<i class="fa fa-user"></i> Lista de Processos
+												</h4>
+												
+												<div class="table-responsive" th:fragment="processos" id="divProcessos">
+													<table class="table table-bordered">
+														<thead>
+															<tr>
+																<th>#</th>
+																<th>Identificação de Processo</th>
+																<th>Número Processo</th>
+																<th>Detalhar</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="processo, iProc : ${listaProcesso}">
+																<td><span th:text="${iProc.index + 1 }"></span></td>
+																<td th:switch="${processo.tipProcesso}">
+  																	<span th:case="1">1 - Processo Judicial de não Incidência de Contribuição Previdenciária</span>
+  																	<span th:case="2">2 - Processo Judicial de não Incidência de Imposto de Renda</span>
+  																	<span th:case="3">3 - Processo Judicial de não Incidência de Contribuição Sindical</span>
+  																	<span th:case="4">4 - Processo Judicial de não Incidência de RPPS/Regime Militar</span>
+  																	<span th:case="5">5 - Processo Judicial de não Incidência de FGTS</span>
+																</td>
+																<td><span th:text="${processo.nrproc}"></span></td>
+																<td><span>
+																		<a th:onclick="'javascript:detalharProcesso(\''+ ${processo.tipProcesso} + '\',\''+ ${processo.tpproc} + '\',\'' + ${processo.nrproc} +'\',\''+${processo.extdecisao}+'\',\''+${processo.codsusp}+'\');'">
+																			<i class="fa fa-search"></i>
+																		</a>
+																	</span>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												
+												<h4 class="text-navy">
+													<i class="fa fa-user"></i> Dados para Inclusão de Processo
+												</h4>
+												
+												<div class="form-group row">
+													<label class="col-sm-3 col-form-label"><span class="text-danger">* </span>Identificação de Processo:</label>
+													<div class="col-sm-6">
+														<div class="col-sm-6">
+															<select class="form-control m-b" onchange="exibirCamposProcesso('INCLUIR');" th:field="*{idProcesso}">
+																<option value="">Selecione</option>
+																<option th:each="codigo : ${listaIdenficacaoProcesso}" th:value="${codigo.codPar}" th:text="${codigo.codPar} + ' - ' + ${codigo.desDescricao}"></option>
+															</select>
+															<span class="text-danger">
+					                        					<label th:if="${#fields.hasErrors('idProcesso')}" th:errors="*{idProcesso}" class="validation-message"></label>
+                    										</span>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label" id="tipoProcessoLb" style="display:none"><span class="text-danger">* </span>Tipo de Processo:</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4" id="tipoProcessoDiv" style="display:none">
+																<select  class="form-control m-b" th:field="*{tipoProcesso}">
+																	<option value="">Selecione</option>
+																	<option value="1">1 – Administrativo</option>
+																	<option value="2">2 – Judicial</option>
+																</select>
+																<span class="text-danger">
+					                        						<label th:if="${#fields.hasErrors('tipoProcesso')}" th:errors="*{tipoProcesso}" class="validation-message"></label>
+                    											</span> 
+															</div>
+															<label class="col-sm-2 col-form-label" id="numProcessoLb" style="display:none"><span class="text-danger">* </span>Número do Processo:</label>
+															<div class="col-md-4" id="numProcessoDiv" style="display:none">
+																<input type="text" class="form-control" maxlength="20" th:field="*{numProcesso}"/>
+																<span class="text-danger">
+				                        							<label th:if="${#fields.hasErrors('numProcesso')}" th:errors="*{numProcesso}" class="validation-message"></label>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label" id="extensaoDecisaoLb" style="display:none"><span class="text-danger">* </span>Extensão da Decisão/Sentença:</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4" id="extensaoDecisaoDiv" style="display:none">
+																<select class="form-control m-b" th:field="*{extensaoDecisao}">
+																	<option value="">Selecione</option>
+																	<option value="1">1 – Contribuição Previdenciária Patronal</option>
+																	<option value="2">2 – Contribuição Previdenciária Patronal + Descontada dos Segurados</option>
+																</select>
+																<span class="text-danger">
+					                        						<label th:if="${#fields.hasErrors('extensaoDecisao')}" th:errors="*{extensaoDecisao}" class="validation-message"></label>
+																</span>
+															</div>
+															<label class="col-sm-2 col-form-label" id="codSuspensaoLb" style="display:none"><span class="text-danger">* </span>Código da Suspensão:</label>
+															<div class="col-md-4" id="codSuspensaoDiv" style="display:none">
+																<input type="text" class="form-control" maxlength="20" th:field="*{codSuspensao}"/>
+																<span class="text-danger">
+					                        						<label th:if="${#fields.hasErrors('codSuspensao')}" th:errors="*{codSuspensao}" class="validation-message"></label>
+																</span>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												
+												<div class="form-group row" id="btnIncluir" style="display:none">
+													<div class="col-sm-12">
+														<div class="text-center">
+															<button id="botaoInclur" name="botaoIncluir" class="btn btn-primary dim btn-primary-dim" type="button" onclick="incluirProcesso();">
+																Incluir
+															</button>
+														</div>
+													</div>
+												</div>
+												
+												<!-- Fim Aba Processo -->
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<br />
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<div class="text-center">
+											<button id="botaoConsultar"	class="btn btn-primary dim btn-primary-dim" type="submit" onclick="habilitaCamposForm(document.forms[0])">
+												Gravar
+											</button>
+											<button id="botaoVoltar" class="btn btn-primary dim btn-primary-dim" type="button" onclick="voltar()">
+												Voltar
+											</button>
+										</div>
+									</div>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+</body>
+</html>

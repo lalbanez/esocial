@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/meuFragment :: headFragment"></head>
+<!--     <meta charset="utf-8"> -->
+
+<script type="text/javascript" >
+	function exibirCamposProcesso(opcao){
+		
+		$("#identificacaoProcesso").show();
+		$("#msgSelecione").hide();
+		
+		switch (opcao) {
+	    case "1":
+	    	$("#camposContribuicaoPrevidenciaria").show();
+	    	$("#camposIRRF").hide();
+	    	$("#camposFGTSeContribuicaoSindical").hide();
+	    	$("#camposContribuicaoSindicalRPPS").hide();
+	    	$("#idProcesso").val("1");
+	    	break;
+	    case "2":
+	    	$("#camposContribuicaoPrevidenciaria").hide();
+	    	$("#camposIRRF").show();
+	    	$("#camposFGTSeContribuicaoSindical").hide();
+	    	$("#camposContribuicaoSindicalRPPS").hide();
+	    	$("#idProcesso").val("2");
+	    	break;
+	    case "3":
+	    	$("#camposContribuicaoPrevidenciaria").hide();
+	    	$("#camposIRRF").hide();
+	    	$("#camposFGTSeContribuicaoSindical").show();
+	    	$("#camposContribuicaoSindicalRPPS").hide();
+	    	$("#idProcesso").val("3");
+	        break;
+	    case "4":
+	    	$("#camposContribuicaoPrevidenciaria").hide();
+	    	$("#camposIRRF").hide();
+	    	$("#camposFGTSeContribuicaoSindical").show();
+	    	$("#camposContribuicaoSindicalRPPS").hide();
+	    	$("#idProcesso").val("4");
+	    	break;
+	    case "5":
+	    	$("#camposContribuicaoPrevidenciaria").hide();
+	    	$("#camposIRRF").hide();
+	    	$("#camposFGTSeContribuicaoSindical").hide();
+	    	$("#camposContribuicaoSindicalRPPS").show();
+	    	$("#idProcesso").val("5")
+	    	break;
+	    default:
+	    	alert("Opção Inválida");
+	    	break;
+		}	 
+	}
+</script>
+
+<body class="fixed-sidebar">
+
+
+	<div class="modal inmodal" id="detalheUltEvento" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <h4 class="modal-title">Rubricas</h4>
+                    <small class="font-bold text-navy"> Detalhe Dados do Último Evento Gerado</small>
+                </div>
+                                                        
+                <div class="modal-body">
+                  	 <div class="row">          
+	                       <div class="col-sm-12 text-left">
+			                   <b>ID do Evento:</b> ID1090412130000002018090410324100001 
+			                </div> 
+			                
+			                <div class="col-sm-6 text-left">
+			                   <b>Status de Evento:</b> Finalizado
+			                </div> 
+	                       <div class="col-sm-6 text-left">
+			                   <b>Data de Geração:</b> 10/09/2018
+			                </div> 
+			                
+	                       <div class="col-sm-6 text-left">
+			                   <b>Nº do Lote:</b> 000010
+			                </div> 
+	                       <div class="col-sm-6 text-left">
+			                   <b>Data de Envio:</b>  11/09/2018
+			                </div>   
+		             
+	                       <div class="col-sm-12 text-left">
+			                   <b>Nº Protocolo de Envio:</b> 1.2.201809.0000000000004475132 
+			                </div> 
+	
+	                       <div class="col-sm-6 text-left">
+			                   <b>Nº Recibo:</b> 1.2.0000000000060847112 
+			                </div> 
+	                       <div class="col-sm-6 text-left">
+			                   <b>Data de Retorno:</b> 11/09/2018
+			                </div>   
+		             
+	                       <div class="col-sm-12 text-left">
+			                   <b>Tipo de Ação:</b> Inclusão
+			                </div> 
+		             
+	                       <div class="col-sm-6 text-left">
+			                   <b>Início Vigência:</b> 2018-07
+			                </div> 
+	                       <div class="col-sm-6 text-left">
+			                   <b>Fim Vigência:</b> 
+			                </div>   
+		        </div>                 
+		        </div>                          
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Fechar</button>                                         
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+	<div id="wrapper">
+
+		<!-- Menu Lateral  -->
+		<nav th:replace="fragments/meuFragment :: menuLateralFragment"></nav>
+
+		<div id="page-wrapper" class="gray-bg">
+
+			<!-- Cabeçalho -->
+			<div th:replace="fragments/meuFragment :: menuSuperiorFragment"></div>
+
+			<!-- Conteúdo -->
+			<br />
+
+			<div class="text-center">
+				<div id="ibox1" class="ibox">
+					<h3 class="text-navy">
+						<b>Visualização Evento S-1010 - Tabela Rubrica</b>
+					</h3>
+				</div>
+			</div>
+
+			<h3 class="text-navy">Identificação do Evento</h3>
+			
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Período:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-4">
+							<span>08/2018</span>
+						</div>
+						<label class="col-sm-2 col-form-label"><b>Tipo de Período:</b></label>
+						<div class="col-md-4">
+							<span>Normal ou Reabertura</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Empregador:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-10">
+							<span>000000000-00 SPPREV</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Origem:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-10">
+							<span>SIGEPREV</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Evento:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-10">
+							<span>Evento S-1010 - Tabela de Rubricas</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Data Geração:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-4">
+							<span>24/12/2018 - 08:00</span>
+						</div>
+						<label class="col-sm-2 col-form-label"><b>Nº Lote:</b></label>
+						<div class="col-md-4">
+							<span>#999</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>ID do Evento:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-4">
+							<span>0000000000</span>
+						</div>
+						<label class="col-sm-2 col-form-label"><b>Status do Evento:</b></label>
+						<div class="col-md-2">
+							<span>Aguardando Envio</span>
+						</div>
+						<div class="col-md-2">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detalheUltEvento"><i class="fa fa-search"></i> Erro</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Nº Protocolo Envio:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-4">
+							<span>0000000000</span>
+						</div>
+						<label class="col-sm-2 col-form-label"><b>Data Envio:</b></label>
+						<div class="col-md-4">
+							<span>01/09/2018</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Nº Recibo Entrega:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-4">
+							<span>0000000000</span>
+						</div>
+						<label class="col-sm-2 col-form-label"><b>Data Recebimento:</b></label>
+						<div class="col-md-4">
+							<span>01/09/2018</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Nº Recibo Retificação:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-4">
+							<span>0000000000</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<h3 class="text-navy"> Ambiente </h3>
+			
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Tipo Ambiente:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-4">
+							<span>Produção</span>
+						</div>
+						<label class="col-sm-2 col-form-label"><b>Tipo Aplicativo:</b></label>
+						<div class="col-md-4">
+							<span>Empregador/Governamental</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label"><b>Versão ambiente:</b></label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-4">
+							<span>0000000000</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<div id="ibox1" class="ibox ">
+						<div class="ibox-content">
+
+							<form id="triatForm" method="post">
+
+								<h4 class="text-navy">Informações de Identificação e Validade</h4>
+
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">
+										Tipo de Ação:
+									</label>
+									<div class="col-sm-10">
+										<div class="row">
+											<div class="col-md-10">
+												<span>Inclusão / Alteração / Exclusão</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">
+										Início Validade:
+									</label>
+									<div class="col-sm-10">
+										<div class="row">
+											<div class="col-md-4">
+												<input type="text" class="form-control" maxlength="20" disabled="disabled"/>
+											</div>
+
+											<label class="col-sm-2 col-form-label">
+												Fim Validade:
+											</label>
+											<div class="col-md-4">
+												<input type="text" class="form-control" maxlength="20" disabled="disabled"/>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">
+										Código da Rubrica:
+									</label>
+									<div class="col-sm-10">
+										<div class="row">
+											<div class="col-md-4">
+												<input type="text" class="form-control" maxlength="20" disabled="disabled"/>
+											</div>
+
+											<label class="col-sm-2 col-form-label">
+												Identificador da Rubrica:
+											</label>
+											<div class="col-md-4">
+												<input type="text" class="form-control" maxlength="20" disabled="disabled"/>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<br />
+
+								<div class="tabs-container">
+									<ul class="nav nav-tabs" role="tablist">
+										<li>
+											<a class="nav-link active" data-toggle="tab" href="#tab-1">
+												Rubrica
+											</a>
+										</li>
+
+										<li>
+											<a class="nav-link" data-toggle="tab" href="#tab-2"> 
+												Processo
+											</a>
+										</li>
+									</ul>
+									<div class="tab-content">
+									<!--  Aba Dados da Rubrica -->
+										<div role="tabpanel" id="tab-1" class="tab-pane active">
+											<div class="panel-body ">
+
+												<h4 class="text-navy">
+													<i class="fa fa-file-text"></i> Dados da Rubrica
+												</h4>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">
+														Descrição:
+													</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-10">
+																<input type="text" class="form-control" maxlength="200" disabled="disabled"/>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label"> Natureza:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<input type="text" class="form-control" maxlength="100" disabled="disabled"/> 
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Tipo de Rubrica:</label>
+													<div class="col-sm-4">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																<option value="">1 - Vencimento, provento ou pensão</option>
+																<option value="">2 - Desconto</option>
+																<option value="">3 - Informativa</option>
+																<option value="">4 - Informativa dedutora</option>
+															</select> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Incidência para Previdência Social:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																
+															</select> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Incidência para IRRF:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																
+															</select> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Incidência para FGTS:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																
+															</select> 
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Incidência para Contribuição Social:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																
+															</select> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Incidência para Contribuição Sindical:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																
+															</select> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Incidência para Contribuições RPPS/Regime Militar:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+															</select> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Teto Remuneratório:</label>
+													<div class="col-sm-4">
+														<div class="col-lg-12 m-l-n">
+															<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																<option value="S">S - Sim</option>
+																<option value="N">N - Não</option>
+															</select> 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Observação:</label>
+													<div class="col-sm-10">
+														<div class="col-lg-12 m-l-n">
+															<textarea rows="4" cols="100" disabled="disabled">
+															</textarea>
+														</div>
+													</div>
+												</div>
+
+
+											</div>
+										</div>
+
+										<!--  Aba Processo -->
+										<div role="tabpanel" id="tab-2" class="tab-pane">
+											<div class="panel-body ">
+											
+												<h4 class="text-navy">
+													<i class="fa fa-user"></i> Lista de Processos
+												</h4>
+												
+												<div class="table-responsive">
+													<table class="table table-bordered">
+														<thead>
+															<tr>
+																<th>#</th>
+																<th>Identificação de Processo</th>
+																<th>Número Processo</th>
+																<th>Detalhar</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td><span th:text="1"></span></td>
+																<td><span th:text="IRRF"></span></td>
+																<td> 000000230 </td>
+																<td><span><a href="javascript:exibirCamposProcesso('2')"><i class="fa fa-search"></i></a></span></td>
+															</tr>
+															<tr>
+																<td><span th:text="2"></span></td>
+																<td><span th:text="FGTS"></span></td>
+																<td> 000005213 </td>
+																<td><span><a href="javascript:exibirCamposProcesso('3')"><i class="fa fa-search"></i></a></span></td>
+															</tr>
+															<tr>
+																<td><span th:text="3"></span></td>
+																<td> Contribuição Previdenciária RPPS/Regime Militar</td>
+																<td> 000085239 </td>
+																<td><span><a href="javascript:exibirCamposProcesso('5')"><i class="fa fa-search"></i></a></span></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												
+												<h4 class="text-navy">
+													<i class="fa fa-user"></i> Informações de Processo
+												</h4>
+												
+												<div class="form-group row" id="msgSelecione" style="display: block">
+													<label class="col-sm-12 col-form-label">Para visualizar, selecione um registro na listagem de processos</label>
+												</div>
+												
+												<div class="form-group row" id="identificacaoProcesso" style="display: none">
+													<label class="col-sm-3 col-form-label">Identificação de Processo:</label>
+													<div class="col-sm-9">
+														<div class="col-sm-9">
+															<select id="idProcesso" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																<option value="1">1 – Contribuição Previdenciária</option>
+																<option value="2">2 – IRRF</option>
+																<option value="3">3 – FGTS</option>
+																<option value="4">4 – Contribuição Sindical</option>
+																<option value="5">5 – Contribuição Previdenciária RPPS/Regime Militar</option>
+															</select> 
+														</div>
+													</div>
+												</div>
+												
+												<!-- Campos Contribuição Previdenciária -->
+
+											<div id="camposContribuicaoPrevidenciaria" style="display: none">
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Tipo de Processo:</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4">
+																<select id="empregador" class="form-control m-b" disabled="disabled">
+																	<option value="">Selecione</option>
+																	<option value="">1 – Administrativo</option>
+																	<option value="">2 – Judicial</option>
+																</select> 
+															</div>
+															<label class="col-sm-2 col-form-label">Número do Processo:</label>
+															<div class="col-md-4">
+																<input type="text" class="form-control" maxlength="20" disabled="disabled"/>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Extensão da Decisão/Sentença:</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4">
+																<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																<option value="">1 – Contribuição Previdenciária Patronal</option>
+																<option value="">2 – Contribuição Previdenciária Patronal + Descontada dos Segurados</option>
+															</select> 
+															</div>
+															<label class="col-sm-2 col-form-label">Código da Suspensão:</label>
+															<div class="col-md-4">
+																<input type="text" class="form-control" maxlength="20" />
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+												<!-- Campos IRRF -->
+											<div id="camposIRRF" style="display: none">
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Número do Processo:</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4">
+																<input type="text" class="form-control" maxlength="20"  disabled="disabled"/>
+															</div>
+															<label class="col-sm-2 col-form-label">Código da Suspensão:</label>
+															<div class="col-md-4">
+																<input type="text" class="form-control" maxlength="20"  disabled="disabled"/>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+												
+
+												<!-- Campos FGTS  e Contribuição Sindical-->
+											<div id="camposFGTSeContribuicaoSindical" style="display: none">
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Número do Processo:</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4">
+																<input type="text" class="form-control" maxlength="20" disabled="disabled"/>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+												
+												<!-- Campos Contribuição Previdenciária RPPS/Regime Militar -->
+											<div id="camposContribuicaoSindicalRPPS" style="display: none">
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Tipo de Processo:</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4">
+																<select id="empregador" class="form-control m-b" disabled="disabled">
+																	<option value="">Selecione</option>
+																	<option value="">1 – Administrativo</option>
+																	<option value="">2 – Judicial</option>
+																</select> 
+															</div>
+															<label class="col-sm-2 col-form-label">Número do Processo:</label>
+															<div class="col-md-4">
+																<input type="text" class="form-control" maxlength="20" disabled="disabled"/>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row">
+													<label class="col-sm-2 col-form-label">Extensão da Decisão/Sentença:</label>
+													<div class="col-sm-10">
+														<div class="row">
+															<div class="col-md-4">
+																<select id="empregador" class="form-control m-b" disabled="disabled">
+																<option value="">Selecione</option>
+																<option value="">1 – Contribuição Previdenciária Patronal</option>
+																<option value="">2 – Contribuição Previdenciária Patronal + Descontada dos Segurados</option>
+																<option value="">3 – Contribuição Previdenciária Descontada dos Segurados</option>
+															</select> 
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+												<!-- Fim Aba Processo -->
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<br />
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<div class="text-center">
+											<button id="botaoConsultar"	class="btn btn-primary dim btn-primary-dim" type="button">
+												Gravar
+											</button>
+											<button id="botaoConsultar" class="btn btn-primary dim btn-primary-dim" type="button">
+												Voltar
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

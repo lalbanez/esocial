@@ -153,43 +153,43 @@ background-color: #f3f3f4;
                 <div class="modal-body">
                   	 <div class="row">          
 	                       <div class="col-sm-12 text-left">
-			                   <b>ID do Evento:</b> <label th:text="*{idEventoUltEvGerado}"></label> 
+			                   <b>ID do Evento:</b> <label th:text="${dadosUltimoEventoGerado.id}"></label> 
 			                </div> 
 			                
 			                <div class="col-sm-6 text-left">
-			                   <b>Status de Evento:</b> <label th:text="*{statusEventoUltEvGerado}"></label>
+			                   <b>Status de Evento:</b> <label th:text="${dadosUltimoEventoGerado.ctr_flg_status.descricao}"></label>
 			                </div> 
 	                       <div class="col-sm-6 text-left">
-			                   <b>Data de Geração:</b> <label th:text="*{dtGeracaoUltEvGerado}"></label>
+			                   <b>Data de Geração:</b> <label th:text="${#dates.format(dadosUltimoEventoGerado.dat_ing, 'dd/MM/yyyy')}"></label>
 			                </div> 
 			                
 	                       <div class="col-sm-6 text-left">
-			                   <b>Nº do Lote:</b> <label th:text="*{numLoteUltEvGerado}"></label>
+			                   <b>Nº do Lote:</b> <label th:text="${dadosUltimoEventoGerado.id_lote}"></label>
 			                </div> 
 	                       <div class="col-sm-6 text-left">
-			                   <b>Data de Envio:</b>  <label th:text="*{dataEnvioUltEvGerado}"></label>
+			                   <b>Data de Envio:</b>  <label th:text="${dadosUltimoEventoGerado.ws_dh_proc}"></label>
 			                </div>   
 		             
 	                       <div class="col-sm-12 text-left">
-			                   <b>Nº Protocolo de Envio:</b> <label th:text="*{numProtocoloEnvioUltEvGerado}"></label>
+			                   <b>Nº Protocolo de Envio:</b> <label th:text="${dadosUltimoEventoGerado.ws_cod_resposta}"></label>
 			                </div> 
 	
 	                       <div class="col-sm-6 text-left">
-			                   <b>Nº Recibo:</b> <label th:text="*{numReciboUltEvGerado}"></label>
+			                   <b>Nº Recibo:</b> <label th:text="${dadosUltimoEventoGerado.ws_num_recibo}"></label>
 			                </div> 
 	                       <div class="col-sm-6 text-left">
-			                   <b>Data de Retorno:</b> <label th:text="*{dataRetornoUltEvGerado}"></label>
+			                   <b>Data de Retorno:</b> <label th:text="${dadosUltimoEventoGerado.ws_dh_proc}"></label>
 			                </div>   
 		             
 	                       <div class="col-sm-12 text-left">
-			                   <b>Tipo de Ação:</b>  <label th:text="*{tipoAcaoUltEvGerado}"></label>
+			                   <b>Tipo de Ação:</b>  <label th:text="${dadosUltimoEventoGerado.ctr_flg_acao.descricao}"></label>
 			                </div> 
 		             
 	                       <div class="col-sm-6 text-left">
-			                   <b>Início Vigência:</b> <label th:text="*{iniVigenciaUltEvGerado}"></label>
+			                   <b>Início Vigência:</b> <label th:text="${dadosUltimoEventoGerado.iderubricaInivalid}"></label>
 			                </div> 
 	                       <div class="col-sm-6 text-left">
-			                   <b>Fim Vigência:</b> <label th:text="*{fimVigenciaUltEvGerado}"></label>
+			                   <b>Fim Vigência:</b> <label th:text="${dadosUltimoEventoGerado.iderubricaFimvalid}"></label>
 			                </div>   
 			                
 		        </div>                 
@@ -258,11 +258,11 @@ background-color: #f3f3f4;
 							<tbody>
 								<tr>
 									<td> <span th:text="${dadosUltimoEventoGerado.id}">     </span> </td>
-									<td> <span th:text="${dadosUltimoEventoGerado.dat_ing}">    </span> </td>
-									<td> <span th:text="*{tipoAcaoUltEvGerado}">     </span> </td>
-									<td> <span th:text="*{iniVigenciaUltEvGerado}">  </span> </td>
-									<td> <span th:text="*{fimVigenciaUltEvGerado}">  </span> </td>
-									<td> <span th:text="*{statusEventoUltEvGerado}"> </span> </td>
+									<td> <span th:text="${#dates.format(dadosUltimoEventoGerado.dat_ing, 'dd/MM/yyyy')}">    </span> </td>
+									<td> <span th:text="${dadosUltimoEventoGerado.ctr_flg_acao.descricao}">     </span> </td>
+									<td> <span th:text="${dadosUltimoEventoGerado.iderubricaInivalid}">  </span> </td>
+									<td> <span th:text="${dadosUltimoEventoGerado.iderubricaFimvalid}">  </span> </td>
+									<td> <span th:text="${dadosUltimoEventoGerado.ctr_flg_status.descricao}"> </span> </td>
 									<td>
 										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detalheUltEvento">Detalhar</button>
 									</td>
@@ -330,11 +330,11 @@ background-color: #f3f3f4;
 									<div class="col-sm-10">
 										<div class="row">
 											<div class="col-md-4">
-												<label class="col-sm-4 col-form-label" th:text="*{tipoInscricao}" ></label> 
+												<label class="col-sm-4 col-form-label" th:text="${dadosEmpregador.tpinsc} == 1 ? ${dadosEmpregador.tpinsc} + ' - CNPJ' : ${dadosEmpregador.tpinsc} + ' - CPF'" ></label> 
 											</div>
 											<label class="col-sm-2 col-form-label"> <b>Nº Inscrição: </b> </label>
 											<div class="col-md-4">
-												<label class="col-sm-2 col-form-label" th:text="*{numInscricao}" ></label>
+												<label class="col-sm-2 col-form-label" th:text="${dadosEmpregador.nrinsc}" ></label>
 											</div>
 										</div>
 									</div>

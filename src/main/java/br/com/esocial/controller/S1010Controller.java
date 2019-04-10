@@ -397,46 +397,13 @@ public String incluirProcesso(Model mv,
 	}
 		
 	public void dadosFixos(S1010Form form) throws ParseException {
-		/***********************Identificacao do Evento**********************/
+		/*********************Identificacao do Ambiente**********************/
 		Ambiente ambiente = ambienteDAO.findOne(1);
 
 		form.setIdentificacaoAmbiente(String.valueOf(ambiente.getTpamb()));
 		form.setVersaoProcessoEmissaoEvento(ambiente.getVerproc());
 		form.setProcessoEmissaoEvento(String.valueOf(ambiente.getProcemi()));
 		/*********************************************************************/
-		
-		/***********************Identificação do Empregador**********************/
-		TriatEventoVO empregador = empregadorRepository.findByFlgVigencia('A');
-		
-		form.setTipoInscricao(""+empregador.getTpinsc() + (empregador.getTpinsc().equals(1) ? " - CNPJ" : " - CPF"));
-		form.setNumInscricao(empregador.getNrinsc());
-		/*********************************************************************/
-
-		/***************************Dados Rubrica*****************************/
-		Integer idConsulta = 0;
-		if(form.getIdRubricaConsulta() != null) {
-			idConsulta = Integer.parseInt(form.getIdRubricaConsulta());
-		} else if (form.getCodRubrica() != null) {
-			idConsulta = Integer.parseInt(form.getCodRubrica());
-		}
-		
-		if(!idConsulta.equals(0)) {
-			S1010 s1010 = s1010DAO.findFirstByiderubricaCodrubrOrderBySeqEventoDesc(idConsulta);
-	
-			form.setIdEventoUltEvGerado(s1010.getId());
-			form.setDtGeracaoUltEvGerado(DataUtil.obterStringAnoMes(s1010.getDat_ult_atu()));
-			form.setTipoAcaoUltEvGerado(s1010.getCtr_flg_acao().getDescricao());
-			form.setIniVigenciaUltEvGerado(s1010.getIderubricaInivalid());
-			form.setFimVigenciaUltEvGerado(s1010.getIderubricaFimvalid());
-			form.setStatusEventoUltEvGerado(s1010.getCtr_flg_status().getDescricao());
-	//		form.setDataRetornoUltEvGerado();
-			form.setNumLoteUltEvGerado(String.valueOf(s1010.getId_lote()));
-			form.setNumProtocoloEnvioUltEvGerado(String.valueOf(s1010.getWs_cod_resposta()));
-	//		form.setNumReciboUltEvGerado();
-	//		form.setDataEnvioUltEvGerado();
-	//		form.setDataRetornoUltEvGerado();
-			form.setIdProcesso("");
-		}
 	}
 	
 	
@@ -449,6 +416,12 @@ public String incluirProcesso(Model mv,
 			idConsulta = Integer.parseInt(form.getCodRubrica());
 		}
 		return s1010DAO.findFirstByiderubricaCodrubrOrderBySeqEventoDesc(idConsulta);
+	}
+	
+	
+	@ModelAttribute("dadosEmpregador")
+	public TriatEventoVO getDadosEmpregador() {
+		return empregadorRepository.findByFlgVigencia('A');
 	}
 	
 	

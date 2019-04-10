@@ -73,5 +73,6 @@ public class S1010 {
 	private String ws_dsc_resposta;
 	private String ws_dh_proc;
 	private String ws_ver_app_proc;
+	private String ws_num_recibo;
 	
 }

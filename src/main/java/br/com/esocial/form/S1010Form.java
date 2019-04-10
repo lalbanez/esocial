@@ -20,18 +20,18 @@ public class S1010Form {
 	private String tipoPeriodo;
 
 	
-	/* Dados Ultimo Evento Gerado */
-	private String idEventoUltEvGerado;
-	private String dtGeracaoUltEvGerado;
-	private String tipoAcaoUltEvGerado;
-	private String iniVigenciaUltEvGerado;
-	private String fimVigenciaUltEvGerado;
-	private String statusEventoUltEvGerado;
-	private String numLoteUltEvGerado;
-	private String dataEnvioUltEvGerado;
-	private String numProtocoloEnvioUltEvGerado;
-	private String numReciboUltEvGerado;
-	private String dataRetornoUltEvGerado;
+//	/* Dados Ultimo Evento Gerado */
+//	private String idEventoUltEvGerado;
+//	private String dtGeracaoUltEvGerado;
+//	private String tipoAcaoUltEvGerado;
+//	private String iniVigenciaUltEvGerado;
+//	private String fimVigenciaUltEvGerado;
+//	private String statusEventoUltEvGerado;
+//	private String numLoteUltEvGerado;
+//	private String dataEnvioUltEvGerado;
+//	private String numProtocoloEnvioUltEvGerado;
+//	private String numReciboUltEvGerado;
+//	private String dataRetornoUltEvGerado;
 	
 
 	 /*Identificacao do Evento*/
@@ -39,9 +39,9 @@ public class S1010Form {
 	private String versaoProcessoEmissaoEvento;
 	private String processoEmissaoEvento;
 
-	/*Identificação do Empregador*/
-	private String tipoInscricao;
-	private String numInscricao;
+//	/*Identificação do Empregador*/
+//	private String tipoInscricao;
+//	private String numInscricao;
 	
 	/*Identificação da Operação das Informações*/
 	@NotBlank(message = "* O campo deve estar preenchido")
